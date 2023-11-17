@@ -6,10 +6,7 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_decode, url_encode, url_parse
 
 from odoo import fields, http, SUPERUSER_ID, tools, _
-from odoo.fields import Command
 from odoo.http import request
-from odoo.addons.base.models.ir_qweb_fields import nl2br
-from odoo.addons.http_routing.models.ir_http import slug
 _logger = logging.getLogger(__name__)
 
 class HangerAPI(http.Controller):
@@ -18,11 +15,11 @@ class HangerAPI(http.Controller):
     ], type='http', auth="public", website=True)
     def hanger(self, **post):
         product_template = request.env['product.template']
-        models = product_template.search([('detailed_type', '=', 'model')], limit=20)
-        cloths = product_template.search([('detailed_type', '=', 'model')], limit=60)
+        top_models = product_template.search([('detailed_type', '=', 'model')], limit=12)
+        top_cloths = product_template.search([('detailed_type', '=', 'model')], limit=12)
         values = {
-            'models': models,
-            'cloths': cloths
+            'top_models': top_models,
+            'top_cloths': top_cloths
         }
         return request.render("hangerAI.hanger_dashboard", values)
 
@@ -58,14 +55,25 @@ class HangerAPI(http.Controller):
 
         product = request.env['product.template']
         file = request.httprequest.files.getlist('upload_files')[0]
-        new_model = product.create({
-            'name': file.filename,
-            'detailed_type': 'model',
-            'image_1920': encode_image_to_base64(file)
-        })
+        try:
+            new_model = product.create({
+                'name': file.filename,
+                'detailed_type': 'model',
+                'image_1920': encode_image_to_base64(file)
+            })
+        except Exception as e:
+            _logger.info("upload model fail")
+            _logger.info(e)
 
     @http.route(['/upload_gallery'], type='http', auth="user",
                 website=True, csrf=False)
-    def upload_model(self, **kwargs):
+    def upload_gallery(self, **kwargs):
         pass
         return request.redirect("/try-on")
+
+    @http.route([
+        '/tagging',
+    ], type='http', auth="public", website=True)
+    def hanger_tagging_image(self, **post):
+        values = {}
+        return request.render("hangerAI.hanger_tagging", values)

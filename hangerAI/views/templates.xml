@@ -25,7 +25,9 @@
             </div>
             <div class="tab-func">
                 <div class="icon d-none d-md-block"></div>
-                <span class="func_name">Tab 4</span>
+                <a t-attf-href="/tagging">
+                    <span class="func_name">Tagging</span>
+                </a>
             </div>
             <div class="tab-func">
                 <div class="icon d-none d-md-block"></div>
@@ -75,6 +77,18 @@
                 </div>
                 <div class="list-model">
                     <ul class="ul-list d-flex align-items-stretch mb-0 overflow-visible">
+                        <t t-foreach="top_models" t-as="model">
+                            <li class="d-flex pe-3">
+                                <input type="radio" class="btn-check pe-none"
+                                       name="wsale_categories_top_radios_" id="1" value="1"/>
+                                <div class=" btn btn-light d-flex align-items-center ps-2 pe-3 fs-6 fw-normal " for="1">
+                                    <div class="o_image_40_cover oe_img_bg o_bg_img_center rounded-3 me-3"
+                                         t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % image_data_uri(model.image_1920)}});"
+                                         t-att-alt="model.name"></div>
+                                    <span><t t-esc="model.name"/></span>
+                                </div>
+                            </li>
+                        </t>
                         <li class="d-flex pe-3" data-link-href="/shop/category/desks-1">
                             <input type="radio" class="btn-check pe-none" name="wsale_categories_top_radios_" id="1" value="1"/>
                             <div class=" btn btn-light d-flex align-items-center ps-2 pe-3 fs-6 fw-normal " for="1">

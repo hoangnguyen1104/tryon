@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hanger_tagging" name="Hanger Tagging Image">
+        <t t-call="website.layout">
+            <div class="image_tagging">
+                <div class="content">
+                    <div class="div-upload">
+                        <div class="image-container">
+                            <img class='e_image_tagging'
+                                 style="display: none;
+                                        width: 100%;
+                                        height: 100%;"
+                                 src="" alt=""/>
+                        </div>
+                        <input class="i_upload" type="file" id="upload" style="display:none"/>
+                        <button type="button" class="btn-upload">Tải ảnh</button>
+                    </div>
+                    <div class="div-info">
+                        <div class="list-product">
+                            <ul class="horizontal-menu">
+                                <li><a href="#">pants</a></li>
+                                <li><a href="#">jacket</a></li>
+                                <li><a href="#">Quần</a></li>
+                                <li><a href="#">Quần kaki</a></li>
+                            </ul>
+                        </div>
+                        <div class="details_info">
+                            <table>
+                                <tr>
+                                  <td class="td-name">supercategory</td>
+                                  <td class="td-content">lowerbody</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">silhouette</td>
+                                  <td class="td-content">symmetrical, straight, regular (fit)</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">waistline</td>
+                                  <td class="td-content">normal waist</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">length</td>
+                                  <td class="td-content">maxi (length)</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">opening type</td>
+                                  <td class="td-content">fly (opening)</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">non-textile material type</td>
+                                  <td class="td-content">no non-textile material</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">textile finishing, manufacturing techniques</td>
+                                  <td class="td-content">no special manufacturing technique</td>
+                                </tr>
+                                <tr>
+                                  <td class="td-name">textile pattern</td>
+                                  <td class="td-content">plain (pattern)</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

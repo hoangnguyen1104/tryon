@@ -155,21 +155,26 @@
                     </div>
                 </div>
                 <div id="garmentOptions" class="garmentOptions">
-                  <t t-foreach="cloths" t-as="cloth">
-                      <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
-                        <input type="file" class="input" t-attf-name="input_#{cloth.id}" t-att-value="image_data_uri(cloth.image_1920)"
-                                style="display: none;"/>
-                        <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
-                        <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
-                            <div>
-                                <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                  <div id="tops" class="p-list">
+                        <t t-foreach="cloths" t-as="cloth">
+                          <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                            <input type="file" class="input" t-attf-name="input_#{cloth.id}" t-att-value="image_data_uri(cloth.image_1920)"
+                                    style="display: none;"/>
+                            <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                            <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                <div>
+                                    <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="productNameDiv">
-                            <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
-                        </div>
-                      </div>
-                  </t>
+                            <div class="productNameDiv">
+                                <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                            </div>
+                          </div>
+                      </t>
+                    </div>
+                    <div id="bottoms" class="p-list" style="display: none;">
+                        aloalo
+                    </div>
                 </div>
             </div>
         </div>

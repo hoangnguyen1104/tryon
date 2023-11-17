@@ -16,9 +16,21 @@ if (d_try_on !== null) {
     }
 
     let selectCategory = d_try_on.querySelectorAll(".selectCategoryContainer");
+    let garmentOptions = d_try_on.querySelector(".garmentOptions");
+    let list_cate_products = garmentOptions.querySelectorAll('.p-list');
+    console.log(list_cate_products);
     for (let i = 0; i < selectCategory.length; i++) {
      selectCategory[i].onclick = () => {
             console.log(selectCategory[i].getAttribute("name"));
+            let name = selectCategory[i].getAttribute("name");
+            for (let j=0; j<list_cate_products.length; j++){
+                list_cate_products[j].style.display = 'none';
+                console.log(list_cate_products[j]);
+                if (list_cate_products[j].getAttribute("id") == name){
+                    list_cate_products[j].style.display = 'contents';
+                    console.log(list_cate_products[j]);
+                }
+            }
         }
     }
 }
