@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hanger_try_on" name="Hanger Try On">
+        <t t-call="website.layout">
+            <div class="try_on_frame">
+                <t t-call="hangerAI.change_models"/>
+                <t t-call="hangerAI.change_clothes"/>
+            </div>
+            <div class="popup_change_model" style="display:none;">
+                <div class="titleDiv" style="margin-top: 2%;">
+                    <h2 class="title" style="text-align: center;">
+                    Customize your model
+                    </h2>
+                </div>
+                <div class="d-change-model">
+                    <div class="upscale_image MediaSelector_GridContainer">
+                        <div class="MediaSelector">
+                            <div class="container">
+                                <div class="drag-area">
+                                    <div class="select_image_up">
+                                        <div class="icon">
+                                            <i class="fas fa-images"></i>
+                                        </div>
+                                        <span class="header">Drag &amp; Drop</span>
+                                        <span class="header">or <span class="button">browse</span></span>
+                                        <input class="i-upload-model" type="file" id="upload" style="display:none"/>
+                                        <span class="support">Supports: JPEG, JPG, PNG</span>
+                                    </div>
+                                    <img class='image_upscale' style="display: none;" src="" alt=""/>
+                                </div>
+                                <div class="button-group">
+                                    <button class="clear-image">Tải lại</button>
+                                    <button class="onsave-image" onclick="saveData()">Lưu</button>
+                                </div>
+                            </div>
+                            <div class="upscale_setting" style="display: none;">
+                                <div class="base_box">
+                                    <div class="">
+                                        <h1 class="fw-bold">Upscale Image</h1>
+                                    </div>
+                                </div>
+                                <div class="box_setting">
+                                    <div class="">
+                                        <div class="image_title">
+                                            <p class=""><p class="fw-bold">Input Size: </p><span class="image_size">960 x 1280</span></p>
+                                        </div>
+                                        <label for="upscale_val"><p class="fw-bold">Upscale to: </p></label>
+                                        <select name="upscale_val" id="upscale_val">
+                                            <option value="2">x2</option>
+                                            <option value="4">x4</option>
+                                            <option value="8">x8</option>
+                                            <option value="16">x16</option>
+                                        </select>
+                                        <br/>
+                                        <button class="process_upscale_val">
+                                            <span class="">
+                                                <span class="">Process</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modelsFrame">
+                        <div class="button-group">
+                            <button class="option selected" onclick="selectOption(1)">Your models</button>
+                            <button class="option" onclick="selectOption(2)">System Models</button>
+                        </div>
+                        <div class="modelsOptions your_model">
+                            <t t-foreach="user_models" t-as="model">
+                                <div class="modelsImg" t-attf-name="#{model.id}">
+                                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                    style="display: none;"/>
+                                    <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="modelsOptions system_model" style="display:none;">
+                            <t t-foreach="models" t-as="model">
+                                <div class="modelsImg" t-attf-name="#{model.id}">
+                                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                    style="display: none;"/>
+                                    <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="change_models">
+        <div class="modelFrame">
+            <div class="modelImgContainer">
+                <div class="changeModelDiv"><button class="changeModelButton">Change model</button></div>
+                <a class="paste_model">
+                    <img class="modelImg" src="https://media.revery.ai/generated_model_image/1542389041;symbol_186303-symbol_188928;16763604733868222.png"/>
+                </a>
+            </div>
+        </div>
+    </template>
+    <template id="change_clothes">
+        <div class="clothesFrame">
+            <div class="garmentFrame">
+                <div class="titleDiv">
+                <div class="title">Virtual Dressing Room</div>
+            </div>
+                <div class="segmentFrame">
+<!--                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"-->
+<!--                                style="display: none;"/>-->
+                    <div class="selectCategoryContainer text"><p></p></div>
+                    <div name="tops" class="selectCategoryContainer tops female select" value="tops" id="tops">
+                        <div class="selectCategoryButton">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/tops.svg"/>
+                        </div>
+                    </div>
+                    <div name="bottoms" class="selectCategoryContainer bottoms female " value="bottoms" id="bottoms">
+                        <div class="selectCategoryButton">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/bottoms.svg"/>
+                        </div>
+                    </div>
+                    <div name="outerwear" class="selectCategoryContainer outerwear female " value="outerwear" id="outerwear">
+                        <div class="selectCategoryButton" id="outerwear">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/outerwear.svg"/>
+                        </div>
+                    </div>
+                    <div name="allbody" class="selectCategoryContainer allbody female " value="allbody" id="allbody">
+                        <div class="selectCategoryButton">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/dress.svg"/>
+                        </div>
+                    </div>
+                    <div name="shoes" class="selectCategoryContainer " value="shoes" id="shoes">
+                        <div class="selectCategoryButton">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/shoes.svg"/>
+                        </div>
+                    </div>
+                    <div name="faces" class="selectCategoryContainer " value="faces" id="faces">
+                        <div class="selectCategoryButton face">
+                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/face.svg"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="toggleGarmentContainer">
+                    <div class="">
+                        <form class="upload-gallery" action="/upload_gallery" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="type-gallery" value="cloth" />
+                            <input type="file" name="image" id="fileInput" class="file-input"/>
+                            <input type="submit" value="Upload" />
+                        </form>
+                    </div>
+                    <div class="try-on-btn-g">
+                        <button class="option selected" onclick="selectOption(1)">Your gallery</button>
+                        <button class="option" onclick="selectOption(2)">System gallery</button>
+                    </div>
+                </div>
+                <div id="garmentOptions" class="garmentOptions">
+                  <t t-foreach="cloths" t-as="cloth">
+                      <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                        <input type="file" class="input" t-attf-name="input_#{cloth.id}" t-att-value="image_data_uri(cloth.image_1920)"
+                                style="display: none;"/>
+                        <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                        <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                            <div>
+                                <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                            </div>
+                        </div>
+                        <div class="productNameDiv">
+                            <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                        </div>
+                      </div>
+                  </t>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

@@ -1,0 +1,56 @@
+.tab-func{
+    display: flex;
+    padding: 16px;
+    height: 40px;
+    color: var(--settings__tab-color);
+    font-size: 18px;
+    line-height: 40px;
+    cursor: pointer;
+    white-space: nowrap;
+        background-color: white;
+}
+
+.dashboard_tab_mode{
+}
+
+.dashboard-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 25px 3px 10px;
+}
+
+.dashboard-statistic{
+    display: flex;
+    .btn{
+        margin: 10px;
+        width: 200px;
+        display: grid;
+        background-color: white;
+    }
+}
+
+.main_detail_func_db{
+    background-color: #afe2e042;
+}
+
+.list-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px 10px 10px;
+    .list-title-left{
+        display: flex;
+        align-items: center;
+    }
+}
+
+.c_models_products .oe_img_bg.o_bg_img_center{
+    width: 120px;
+    height: 150px;
+}
+
+.ul-list{
+    overflow: auto !important;
+    transform: translateX(0);
+}

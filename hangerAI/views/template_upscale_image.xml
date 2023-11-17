@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hanger_upscale_image" name="Hanger Upscale Image">
+        <t t-call="website.layout">
+            <div class="upscale_image MediaSelector_GridContainer">
+                <div class="MediaSelector">
+                    <div class="container">
+                        <h1 class="fw-bold">Upload your File :</h1>
+                        <a class="clear-image">Tải lại</a>
+                        <div class="drag-area">
+                            <div class="select_image_up">
+                                <div class="icon">
+                                    <i class="fas fa-images"></i>
+                                </div>
+                                <span class="header">Drag &amp; Drop</span>
+                                <span class="header">or <span class="button">browse</span></span>
+                                <input type="file" id="upload" style="display:none"/>
+                                <span class="support">Supports: JPEG, JPG, PNG</span>
+                            </div>
+                            <img class='image_upscale' style="display: none;" src="" alt=""/>
+                        </div>
+                    </div>
+                    <div class="upscale_setting">
+                        <div class="base_box">
+                            <div class="">
+                                <h1 class="fw-bold">Upscale Image</h1>
+                            </div>
+                        </div>
+                        <div class="box_setting">
+                            <div class="">
+                                <div class="image_title">
+                                    <p class=""><p class="fw-bold">Input Size: </p><span class="image_size">960 x 1280</span></p>
+                                </div>
+                                <label for="upscale_val"><p class="fw-bold">Upscale to: </p></label>
+                                <select name="upscale_val" id="upscale_val">
+                                    <option value="2">x2</option>
+                                    <option value="4">x4</option>
+                                    <option value="8">x8</option>
+                                    <option value="16">x16</option>
+                                </select>
+                                <br/>
+                                <button class="process_upscale_val">
+                                    <span class="">
+                                        <span class="">Process</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

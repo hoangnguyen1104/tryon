@@ -1,0 +1,273 @@
+.try_on_frame{
+    height: 800px;
+    width: 1280px;
+    display: inline;
+}
+
+.modelFrame{
+    width: 50%;
+    display: inline-block;
+    text-align: center;
+}
+
+.modelFrame .modelImg{
+    max-width: 100%;
+    max-height: 800px;
+    margin: 0 auto;
+}
+
+.modelFrame .changeModelDiv{
+    display: flex;
+    position: absolute;
+    width: 15vw;
+    height: 5vw;
+    max-width: 150px;
+    max-height: 50px;
+    -webkit-transform: translate(10%,20%);
+    transform: translate(10%,20%);
+
+    .changeModelButton{
+        width: 100%;
+        font-size: 15px;
+        background: #000;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+}
+
+.clothesFrame{
+    display: inline-block;
+    width: 50%;
+    height: inherit;
+    max-height: 1024px;
+    float: right;
+}
+
+.garmentFrame {
+    max-height: 1024px;
+    height: 100%;
+    margin-top: -1%;
+    .titleDiv {
+        display: inline-flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+        height: 100px;
+        background: #000;
+        .title{
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            padding-top: 20px;
+        }
+    }
+}
+
+.segmentFrame {
+    right: 50%;
+    height: initial;
+    padding: 0 10px;
+    background: #fff;
+    border: 1px solid #bdbdbd;
+    border-radius: 20px 0 0 20px;
+    z-index: 12!important;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    .selectCategoryContainer:hover {
+        outline: 3px solid grey;
+    }
+
+    .selectCategoryContainer {
+        height: 60px;
+        width: 60px;
+        background: #d3d3d3;
+        align-items: center;
+        text-align: center;
+        display: inline-flex;
+        justify-content: center;
+        border-radius: 50px;
+        margin: 5px;
+        cursor: pointer;
+    }
+}
+
+.toggleGarmentContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    position: relative;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 5px;
+    width: 100%;
+
+    .toggleGarmentIcon {
+        height: 40px;
+    }
+
+    .toggleTuck {
+        display: flex;
+        margin-left: 20px;
+    }
+}
+
+.garmentOptions {
+    width: 100%;
+    height: 100%;
+    max-height: 600px;
+    background: #fff;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    vertical-align: top;
+    justify-content: space-evenly;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: .5s;
+
+    .productImgContainer:hover {
+        outline: 3px solid grey;
+    }
+
+    .productImgContainer{
+        width: 25%;
+        height: auto;
+        display: inline-block;
+        padding-bottom: 8px;
+        margin: 1% .7% 2%;
+        border: 2px solid #fff;
+        position: relative;
+        border: 2px solid hsla(0,0%,100%,0);
+        border-radius: 5px;
+
+        .productImg {
+            width: 100%;
+            display: inline-block;
+            border-radius: 5px;
+            border: 2px solid hsla(0,0%,100%,0);
+            cursor: pointer;
+        }
+
+        .productNameDiv {
+            display: inline;
+        }
+    }
+    .heart-icon {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        width: 18px;
+        height: 18px;
+        z-index: 0;
+    }
+}
+
+.popup_change_model{
+    .modelsFrame{
+        width: 50%;
+    }
+    .modelsOptions{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 0;
+    }
+    .modelsImg:hover {
+        outline: 3px solid grey;
+    }
+    .modelsImg {
+        margin-right: 1%;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px;
+        img {
+            max-width: 100%;
+            max-height: 50vh;
+            margin-bottom: 1vw;
+        }
+    }
+}
+
+.d-change-model {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    .upscale_image {
+        margin-left: 3%;
+        margin-right: 1%;
+        width: 50%;
+    }
+    .container {
+        box-shadow: unset !important;
+        padding: unset !important;
+    }
+    .button-group {
+      display: inline-block;
+    }
+
+    .button-group button {
+      display: inline-block;
+      background-color: #f1f1f1;
+      border: none;
+      color: black;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button-group button.selected {
+      background-color: #2196F3;
+      color: white;
+    }
+}
+
+.popup_change_model {
+    .modelsOptions {
+        max-height: 700px;
+        overflow: auto;
+    }
+}
+
+.try-on-btn-g {
+  display: inline-block;
+}
+
+.try-on-btn-g button {
+  display: inline-block;
+  background-color: #f1f1f1;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.try-on-btn-g button.selected {
+  background-color: #2196F3;
+  color: white;
+}
+
+.upload-gallery {
+    .upload-icon {
+      width: 50px;
+      height: 50px;
+      background: url('upload-icon.png') no-repeat center;
+      background-size: cover;
+      cursor: pointer;
+    }
+}
