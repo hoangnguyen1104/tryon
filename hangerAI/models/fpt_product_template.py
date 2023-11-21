@@ -35,13 +35,15 @@ class ProductTemplate(models.Model):
     parse_v3 = fields.Binary()
     openpose_img = fields.Binary()
     openpose_json = fields.Binary()
+    mask = fields.Binary()
 
     root_id = fields.Many2one('product.template')
 
     def _detailed_type_mapping(self):
         type_mapping = super()._detailed_type_mapping()
         type_mapping['model'] = 'service'
-        type_mapping['cloth'] = 'service'
+        type_mapping['upper'] = 'service'
+        type_mapping['lower'] = 'service'
         return type_mapping
 
     def migrate_data(self):
@@ -57,9 +59,8 @@ class ProductTemplate(models.Model):
                         encoded_data = base64.b64encode(binary_data).decode('utf-8')
                         return encoded_data
 
-        dem = 0
-
         # migrate model
+        '''dem = 0
         model_path = "D:\\P.KTCN\\Try_on\\input\\image"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
@@ -67,8 +68,6 @@ class ProductTemplate(models.Model):
             # Check if the file is an image
             if model.endswith(('.jpg', '.jpeg', '.png', '.gif')):
                 dem += 1
-                if dem == 1:
-                    continue
                 if dem > 100: break
                 # Construct the full file path
                 path = os.path.join(model_path, model)
@@ -85,6 +84,28 @@ class ProductTemplate(models.Model):
                         'parse_v3': get_from(model,"image-parse-v3"),
                         'openpose_img': get_from(model,"openpose_img"),
                         'openpose_json': get_from(model,"openpose_json"),
+                    })
+        '''
+        # migrate upper
+        dem = 0
+        model_path = "D:\\P.KTCN\\Try_on\\input\\cloth"
+        model_list = os.listdir(model_path)
+        product = self.env['product.template']
+        for model in model_list:
+            # Check if the file is an image
+            if model.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                dem += 1
+                if dem > 100: break
+                # Construct the full file path
+                path = os.path.join(model_path, model)
+                with open(path, 'rb') as image_file:
+                    binary_data = image_file.read()
+                    encoded_data = base64.b64encode(binary_data)
+                    product.create({
+                        'name': model[:5],
+                        'detailed_type': 'upper',
+                        'image_1920': encoded_data,
+                        'mask': get_from(model, "cloth-mask"),
                     })
 
 
