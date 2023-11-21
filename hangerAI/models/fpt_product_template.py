@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+import os
+import base64
+import binascii
+import io
 
+from PIL import Image, ImageOps
+try:
+    from PIL.Image import Transpose, Palette, Resampling
+except ImportError:
+    Transpose = Palette = Resampling = Image
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
@@ -10,13 +19,24 @@ class ProductTemplate(models.Model):
                               ('female', 'Female')], string='Giới tính')
 
     detailed_type = fields.Selection(selection_add=[
-        ('model', 'Models'),
-        ('cloth', 'Clothes')],
+        ('model', 'Người mẫu'),
+        ('upper', 'Áo'),
+        ('lower', 'Quần')],
         ondelete={
             'model': 'set service',
-            'cloth': 'set service',
+            'upper': 'set service',
+            'lower': 'set service',
         }
     )
+
+    agonostic_v32 = fields.Binary()
+    densepose = fields.Binary()
+    parse_agonostic_v32 = fields.Binary()
+    parse_v3 = fields.Binary()
+    openpose_img = fields.Binary()
+    openpose_json = fields.Binary()
+
+    root_id = fields.Many2one('product.template')
 
     def _detailed_type_mapping(self):
         type_mapping = super()._detailed_type_mapping()
@@ -25,32 +45,46 @@ class ProductTemplate(models.Model):
         return type_mapping
 
     def migrate_data(self):
-        print("okkk")
-        import os
-        import base64
-        import binascii
-        import io
+        def get_from(model, folderName):
+            key = model[:5]
+            item_path = f"D:\\P.KTCN\\Try_on\\input\{folderName}"
+            item_list = os.listdir(item_path)
+            for item in item_list:
+                if item.startswith(key):
+                    path = os.path.join(item_path, item)
+                    with open(path, 'rb') as image_file:
+                        binary_data = image_file.read()
+                        encoded_data = base64.b64encode(binary_data).decode('utf-8')
+                        return encoded_data
 
-        from PIL import Image, ImageOps
-        try:
-            from PIL.Image import Transpose, Palette, Resampling
-        except ImportError:
-            Transpose = Palette = Resampling = Image
-        folder_path = "C:\\Users\\hoangnh61\\Downloads\\Try_on\\input\\image"
-        file_list = os.listdir(folder_path)
+        dem = 0
+
+        # migrate model
+        model_path = "D:\\P.KTCN\\Try_on\\input\\image"
+        model_list = os.listdir(model_path)
         product = self.env['product.template']
-        for file_name in file_list:
+        for model in model_list:
             # Check if the file is an image
-            if file_name.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            if model.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                dem += 1
+                if dem == 1:
+                    continue
+                if dem > 100: break
                 # Construct the full file path
-                file_path = os.path.join(folder_path, file_name)
-                print(file_name[:5])
-                with open(file_path, 'rb') as image_file:
+                path = os.path.join(model_path, model)
+                with open(path, 'rb') as image_file:
                     binary_data = image_file.read()
                     encoded_data = base64.b64encode(binary_data)
                     product.create({
-                        'name': file_name[:5],
+                        'name': model[:5],
                         'detailed_type': 'model',
-                        'image_1920': encoded_data
+                        'image_1920': encoded_data,
+                        'agonostic_v32': get_from(model,"agnostic-v3.2"),
+                        'densepose': get_from(model,"image-densepose"),
+                        'parse_agonostic_v32': get_from(model,"image-parse-agnostic-v3.2"),
+                        'parse_v3': get_from(model,"image-parse-v3"),
+                        'openpose_img': get_from(model,"openpose_img"),
+                        'openpose_json': get_from(model,"openpose_json"),
                     })
-                    # product.image_1920 = Image.open(file_path)
+
+

@@ -13,4 +13,35 @@
             </xpath>
         </field>
     </record>
+
+    <record id="fpt_product_template_only_form_view" model="ir.ui.view">
+        <field name="name">product.template.only.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="preprocess" string="Preprocess">
+                    <group>
+                        <group>
+                            <field name="agonostic_v32"/>
+                            <field name="densepose"/>
+                            <field name="parse_agonostic_v32"/>
+                            <field name="parse_v3"/>
+                        </group>
+                        <group>
+                            <field name="openpose_img"/>
+                            <field name="openpose_json"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem name="root_hanger_ai"
+        id="root_hanger_ai"/>
+    <menuitem id="models"
+        name="Models"
+        action="product.product_template_action"
+        parent="root_hanger_ai"/>
 </odoo>
