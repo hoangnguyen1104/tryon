@@ -16,7 +16,7 @@
                     <div class="upscale_image MediaSelector_GridContainer">
                         <div class="MediaSelector">
                             <div class="container">
-                                <div class="drag-area">
+                                <div class="drag-area border-upload">
                                     <div class="select_image_up">
                                         <div class="icon">
                                             <i class="fas fa-images"></i>
@@ -63,9 +63,9 @@
                         </div>
                     </div>
                     <div class="modelsFrame">
-                        <div class="button-group">
-                            <button class="option selected" onclick="selectOption(1)">Your models</button>
-                            <button class="option" onclick="selectOption(2)">System Models</button>
+                        <div class="try-on-btn-g">
+                            <button class="option selected" onclick="selectOptionModel(1)">Your models</button>
+                            <button class="option" onclick="selectOptionModel(2)">System Models</button>
                         </div>
                         <div class="modelsOptions your_model">
                             <t t-foreach="user_models" t-as="model">
@@ -93,7 +93,23 @@
     <template id="change_models">
         <div class="modelFrame">
             <div class="modelImgContainer">
-                <div class="changeModelDiv"><button class="changeModelButton">Change model</button></div>
+                <div class="changeModelDiv">
+                    <button class="changeModelButton">Change model</button>
+                    <button id="downloadButton">Download Image</button>
+                    <!-- Modal -->
+                    <div id="imageSizeModal" class="modal">
+                      <div class="modal-content">
+                        <label for="imageSizeSelect">Select Image Size:</label>
+                        <select id="imageSizeSelect">
+                          <option value="small">Small</option>
+                          <option value="medium">Medium</option>
+                          <option value="large">Large</option>
+                        </select>
+                        <button id="confirmButton">Download</button>
+                          <button id="cancelButton">Cancel</button>
+                      </div>
+                    </div>
+                </div>
                 <a class="paste_model">
                     <img class="modelImg" src="https://media.revery.ai/generated_model_image/1542389041;symbol_186303-symbol_188928;16763604733868222.png"/>
                 </a>
@@ -144,36 +160,88 @@
                 <div class="toggleGarmentContainer">
                     <div class="">
                         <form class="upload-gallery" action="/upload_gallery" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="type-gallery" value="cloth" />
+                            <input type="hidden" class="type-gallery" name="type-gallery" value="tops"/>
                             <input type="file" name="image" id="fileInput" class="file-input"/>
                             <input type="submit" value="Upload" />
                         </form>
                     </div>
                     <div class="try-on-btn-g">
-                        <button class="option selected" onclick="selectOption(1)">Your gallery</button>
-                        <button class="option" onclick="selectOption(2)">System gallery</button>
+                        <button class="option selected" onclick="selectOptionCloth(1)">Your gallery</button>
+                        <button class="option" onclick="selectOptionCloth(2)">System gallery</button>
                     </div>
                 </div>
                 <div id="garmentOptions" class="garmentOptions">
                   <div id="tops" class="p-list">
-                        <t t-foreach="cloths" t-as="cloth">
-                          <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
-                            <input type="file" class="input" t-attf-name="input_#{cloth.id}" t-att-value="image_data_uri(cloth.image_1920)"
-                                    style="display: none;"/>
-                            <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
-                            <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
-                                <div>
-                                    <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
-                                </div>
-                            </div>
-                            <div class="productNameDiv">
-                                <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
-                            </div>
-                          </div>
-                      </t>
+                      <div class="tops_your_gallery">
+                            <t t-foreach="user_uppers" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}" value="tops"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
+                      <div class="tops_system_gallery" style="display: none;">
+                            <t t-foreach="system_uppers" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}"  value="tops"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
                     </div>
                     <div id="bottoms" class="p-list" style="display: none;">
-                        aloalo
+                      <div class="bottoms_your_gallery">
+                            <t t-foreach="user_lowers" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}" value="bottoms"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
+                      <div class="bottoms_system_gallery" style="display: none;">
+                            <t t-foreach="system_lowers" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}" alue="bottoms"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
                     </div>
                 </div>
             </div>
