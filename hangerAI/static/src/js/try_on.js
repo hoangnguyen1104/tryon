@@ -40,6 +40,24 @@ if (popup_change_model !== null){
     let image_options = popup_change_model.querySelectorAll(".modelsImg");
     for (let i = 0; i < image_options.length; i++) {
       image_options[i].onclick = () => {
+            var myFormData = new FormData();
+            //var file = document.getElementsByClassName('i-upload-model')[0].files[0];
+            myFormData.append('model_id', image_options[i].getAttribute("name"));
+            console.log(image_options[i], "okokokoko");
+            $.ajax({
+              url: '/mkdir_model',
+              type: 'POST',
+              processData: false,
+              contentType: false,
+              dataType : 'json',
+              data: myFormData,
+              success: function() {
+                alert('Upload thành công!');
+               },
+               error: function () {
+               }
+            });
+
             d_try_on.querySelector('.modelImg').src = image_options[i].getElementsByTagName('input')[0].defaultValue;
             popup_change_model.style.display = 'none';
             d_try_on.style.display = 'contents';
@@ -50,7 +68,6 @@ if (popup_change_model !== null){
         var myFormData = new FormData();
         var file = document.getElementsByClassName('i-upload-model')[0].files[0];
         myFormData.append('upload_files', file);
-        console.log(file, "ancddd")
         $.ajax({
           url: '/upload_model',
           type: 'POST',

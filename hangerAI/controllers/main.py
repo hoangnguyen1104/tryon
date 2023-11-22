@@ -77,3 +77,10 @@ class HangerAPI(http.Controller):
     def hanger_tagging_image(self, **post):
         values = {}
         return request.render("hangerAI.hanger_tagging", values)
+
+    @http.route([
+        '/mkdir_model',
+    ], type='http', auth="public", website=True, csrf=False)
+    def mkdir_model(self, **kwargs):
+        a = 1
+        pass
