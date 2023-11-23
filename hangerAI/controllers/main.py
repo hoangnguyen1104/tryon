@@ -2,7 +2,9 @@
 import json
 import logging
 import requests
-
+from io import BytesIO
+from odoo import http
+from odoo.http import Stream
 from datetime import datetime
 from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_decode, url_encode, url_parse
@@ -194,24 +196,9 @@ class HangerAPI(http.Controller):
         image_data = kwargs.get('upload_files').split(',')[1]
         decoded_image_data = base64.b64decode(image_data)
 
-        def encode_image_to_base64(file_storage):
-            encoded_string = base64.b64encode(file_storage.read())
-            return encoded_string.decode("utf-8")
+        def download_file_from_decoded_data(decoded_data, file_path):
+            with open(file_path, 'wb') as file:
+                file.write(decoded_data)
 
-        attachment_vals = {
-            'datas': decoded_image_data,
-            'name': "image - " + kwargs.get('imageSize'),
-        }
-
-        image = request.env['ir.attachment'].create(attachment_vals)
-
-        def get_base_url():
-            request = http.request.httprequest
-            base_url = request.base_url
-            return base_url
-
-        url = f'/web/content/ir.attachment/{image.id}/data?' + url_encode({
-            'download': 'true',
-            'filename': "image - " + kwargs.get('imageSize')
-        })
-        request.redirect(url)
+        file_path = 'D:\\ans.jpg'
+        download_file_from_decoded_data(decoded_image_data, file_path)
