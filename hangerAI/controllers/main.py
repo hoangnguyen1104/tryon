@@ -121,7 +121,7 @@ class HangerAPI(http.Controller):
         import os
         import shutil
         def make_folder(folder, file, type_file, name_file):
-            folder_path = 'E:\\test-try-on\\' + folder
+            folder_path = 'D:\\test-try-on\\' + folder
 
             if os.path.exists(folder_path):
                 shutil.rmtree(folder_path)
@@ -147,6 +147,8 @@ class HangerAPI(http.Controller):
         make_folder("image-parse-v3", model.parse_v3, ".png", model.name + "_00")
         make_folder("openpose_img", model.openpose_img, ".png", model.name + "_00_rendered")
         make_folder("openpose_json", model.openpose_json, ".json", model.name + "_00_keypoints")
+        make_folder("cloth", model.cloth_model, ".jpg", model.name + "_00")
+        make_folder("cloth-mask", model.cloth_mask_model, ".jpg", model.name + "_00")
 
     @http.route([
         '/mkdir_cloth',
@@ -156,11 +158,7 @@ class HangerAPI(http.Controller):
         import os
         import shutil
         def make_folder(folder, file, type_file, name_file):
-            folder_path = 'E:\\test-try-on\\' + folder
-
-            if os.path.exists(folder_path):
-                shutil.rmtree(folder_path)
-            os.makedirs(folder_path)
+            folder_path = 'D:\\test-try-on\\' + folder
 
             # Set the file path including the folder path and file name with the .jpg extension
             file_path = os.path.join(folder_path, name_file + type_file)
@@ -175,10 +173,45 @@ class HangerAPI(http.Controller):
 
         product_template = request.env['product.template']
         cloth = product_template.browse(int(kwargs.get('cloth_id')))
+        model = product_template.browse(int(kwargs.get('model_id')))
         image_binary = base64.b64decode(cloth.image_1920)
 
         make_folder("cloth", cloth.image_1920, ".jpg", cloth.name + "_00")
         make_folder("cloth-mask", cloth.mask, ".jpg", cloth.name + "_00")
+
+        url = 'http://127.0.0.1:5000/process_image'
+
+        # Parameters for the request (image and cloth names)
+        params = {
+            'image': model.name,
+            'cloth': cloth.name
+        }
+
+        # Make the POST request
+        try:
+            response = requests.post(url, params=params)
+        except Exception as e:
+            print(e)
+
+        # Check the response status code
+        if response.status_code == 200:
+            # Request was successful
+            byte_string = response.content
+            string = byte_string.decode('utf-8')
+            prefix = '{"files":"b\''
+            suffix = "\'}\n"
+            inner_string = string[len(prefix):-len(suffix)]
+            image_data = base64.b64decode(inner_string[:-1])
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+            response_data = {
+                'image': image_base64,
+                'content_type': 'image/jpeg',
+                'filename': 'image.jpg'
+            }
+            return json.dumps(response_data)
+        else:
+            # Request failed
+            print('Request failed with status code:', response.status_code)
 
         # Return the binary image data as the response
         response_data = {

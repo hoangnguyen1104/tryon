@@ -29,6 +29,9 @@ class ProductTemplate(models.Model):
         }
     )
 
+    cloth_model = fields.Binary()
+    cloth_mask_model = fields.Binary()
+
     agonostic_v32 = fields.Binary()
     densepose = fields.Binary()
     parse_agonostic_v32 = fields.Binary()
@@ -49,7 +52,7 @@ class ProductTemplate(models.Model):
     def migrate_data(self):
         def get_from(model, folderName):
             key = model[:5]
-            item_path = f"E:\\Try_on\\Try_on\\input\\{folderName}"
+            item_path = f"D:\\Try_on\\input\\{folderName}"
             item_list = os.listdir(item_path)
             for item in item_list:
                 if item.startswith(key):
@@ -61,7 +64,7 @@ class ProductTemplate(models.Model):
 
         # migrate model
         dem = 0
-        model_path = "E:\\Try_on\\Try_on\\input\\image"
+        model_path = "D:\\Try_on\\input\\image"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
         for model in model_list:
@@ -84,28 +87,30 @@ class ProductTemplate(models.Model):
                         'parse_v3': get_from(model,"image-parse-v3"),
                         'openpose_img': get_from(model,"openpose_img"),
                         'openpose_json': get_from(model,"openpose_json"),
+                        'cloth_model': get_from(model, "cloth"),
+                        'cloth_mask_model': get_from(model, "cloth-mask"),
                     })
 
         # migrate upper
-        # dem = 0
-        # model_path = "E:\\Try_on\\Try_on\\input\\cloth"
-        # model_list = os.listdir(model_path)
-        # product = self.env['product.template']
-        # for model in model_list:
-        #     # Check if the file is an image
-        #     if model.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-        #         dem += 1
-        #         if dem > 100: break
-        #         # Construct the full file path
-        #         path = os.path.join(model_path, model)
-        #         with open(path, 'rb') as image_file:
-        #             binary_data = image_file.read()
-        #             encoded_data = base64.b64encode(binary_data)
-        #             product.create({
-        #                 'name': model[:5],
-        #                 'detailed_type': 'upper',
-        #                 'image_1920': encoded_data,
-        #                 'mask': get_from(model, "cloth-mask"),
-        #             })
+        dem = 0
+        model_path = "D:\\Try_on\\input\\cloth"
+        model_list = os.listdir(model_path)
+        product = self.env['product.template']
+        for model in model_list:
+            # Check if the file is an image
+            if model.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                dem += 1
+                if dem > 100: break
+                # Construct the full file path
+                path = os.path.join(model_path, model)
+                with open(path, 'rb') as image_file:
+                    binary_data = image_file.read()
+                    encoded_data = base64.b64encode(binary_data)
+                    product.create({
+                        'name': model[:5],
+                        'detailed_type': 'upper',
+                        'image_1920': encoded_data,
+                        'mask': get_from(model, "cloth-mask"),
+                    })
 
 

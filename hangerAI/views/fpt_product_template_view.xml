@@ -32,6 +32,8 @@
                             <field name="openpose_img"/>
                             <field name="openpose_json"/>
                             <field name="mask"/>
+                            <field name="cloth_model"/>
+                            <field name="cloth_mask_model"/>
                         </group>
                     </group>
                 </page>

@@ -15,6 +15,7 @@ if (d_try_on !== null) {
             var myFormData = new FormData();
             myFormData.append('cloth_id', e.getAttribute("name"));
             myFormData.append('type_gallery', e.getAttribute("value"));
+            myFormData.append('model_id', d_try_on.querySelector('.save-model-id').value);
             $.ajax({
               url: '/mkdir_cloth',
               type: 'POST',
@@ -80,7 +81,7 @@ if (popup_change_model !== null){
                error: function () {
                }
             });
-
+            d_try_on.querySelector('.save-model-id').value = image_options[i].getAttribute("name");
             d_try_on.querySelector('.modelImg').src = image_options[i].getElementsByTagName('input')[0].defaultValue;
             popup_change_model.style.display = 'none';
             d_try_on.style.display = 'contents';

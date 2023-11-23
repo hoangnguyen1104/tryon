@@ -111,6 +111,7 @@
                     </div>
                 </div>
                 <a class="paste_model">
+                    <input type="hidden" class="save-model-id" name="type-gallery" value=""/>
                     <img class="modelImg" src="https://media.revery.ai/generated_model_image/1542389041;symbol_186303-symbol_188928;16763604733868222.png"/>
                 </a>
             </div>
