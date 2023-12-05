@@ -95,24 +95,19 @@
             <div class="modelImgContainer">
                 <div class="changeModelDiv">
                     <button class="changeModelButton">Change model</button>
-                    <button id="downloadButton">Download Image</button>
+                    <button id="downloadButton">Download</button>
                     <!-- Modal -->
                     <div id="imageSizeModal" class="modal">
                       <div class="modal-content">
-                        <label for="imageSizeSelect">Select Image Size:</label>
-                        <select id="imageSizeSelect">
-                          <option value="small">Small</option>
-                          <option value="medium">Medium</option>
-                          <option value="large">Large</option>
-                        </select>
+                        <button id="confirmUpscale">Upscale Now</button>
                         <button id="confirmButton">Download</button>
-                          <button id="cancelButton">Cancel</button>
+                         <button id="cancelButton">Cancel</button>
                       </div>
                     </div>
                 </div>
                 <a class="paste_model">
                     <input type="hidden" class="save-model-id" name="type-gallery" value=""/>
-                    <img class="modelImg" src="https://media.revery.ai/generated_model_image/1542389041;symbol_186303-symbol_188928;16763604733868222.png"/>
+                    <img class="modelImg" src=""/>
                 </a>
             </div>
         </div>
@@ -126,7 +121,6 @@
                 <div class="segmentFrame">
 <!--                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"-->
 <!--                                style="display: none;"/>-->
-                    <div class="selectCategoryContainer text"><p></p></div>
                     <div name="tops" class="selectCategoryContainer tops female select" value="tops" id="tops">
                         <div class="selectCategoryButton">
                             <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/tops.svg"/>
@@ -142,30 +136,8 @@
                             <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/outerwear.svg"/>
                         </div>
                     </div>
-                    <div name="allbody" class="selectCategoryContainer allbody female " value="allbody" id="allbody">
-                        <div class="selectCategoryButton">
-                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/dress.svg"/>
-                        </div>
-                    </div>
-                    <div name="shoes" class="selectCategoryContainer " value="shoes" id="shoes">
-                        <div class="selectCategoryButton">
-                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/shoes.svg"/>
-                        </div>
-                    </div>
-                    <div name="faces" class="selectCategoryContainer " value="faces" id="faces">
-                        <div class="selectCategoryButton face">
-                            <img src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/face.svg"/>
-                        </div>
-                    </div>
                 </div>
                 <div class="toggleGarmentContainer">
-                    <div class="">
-                        <form class="upload-gallery" action="/upload_gallery" method="post" enctype="multipart/form-data">
-                            <input type="hidden" class="type-gallery" name="type-gallery" value="tops"/>
-                            <input type="file" name="image" id="fileInput" class="file-input"/>
-                            <input type="submit" value="Upload" />
-                        </form>
-                    </div>
                     <div class="try-on-btn-g">
                         <button class="option selected" onclick="selectOptionCloth(1)">Your gallery</button>
                         <button class="option" onclick="selectOptionCloth(2)">System gallery</button>
@@ -244,6 +216,13 @@
                             </t>
                       </div>
                     </div>
+                </div>
+                <div class="d-upload-gallery">
+                    <form class="upload-gallery" action="/upload_gallery" method="post" enctype="multipart/form-data">
+                        <input type="hidden" class="type-gallery" name="type-gallery" value="tops"/>
+                        <input type="file" name="image" id="fileInput" class="file-input"/>
+                        <input type="submit" value="Upload" />
+                    </form>
                 </div>
             </div>
         </div>

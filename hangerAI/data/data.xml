@@ -2,8 +2,14 @@
 <odoo>
     <data>
         <record id="menu_hanger" model="website.menu">
-            <field name="name">Hanger</field>
-            <field name="url">/hanger</field>
+            <field name="name">Try-on</field>
+            <field name="url">/try-on</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">20</field>
+        </record>
+        <record id="menu_hanger" model="website.menu">
+            <field name="name">Upscale</field>
+            <field name="url">/upscale</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">20</field>
         </record>

@@ -52,7 +52,7 @@ class ProductTemplate(models.Model):
     def migrate_data(self):
         def get_from(model, folderName):
             key = model[:5]
-            item_path = f"D:\\Try_on\\input\\{folderName}"
+            item_path = f"D:\\P.KTCN\\Try_on\\input\\{folderName}"
             item_list = os.listdir(item_path)
             for item in item_list:
                 if item.startswith(key):
@@ -64,7 +64,7 @@ class ProductTemplate(models.Model):
 
         # migrate model
         dem = 0
-        model_path = "D:\\Try_on\\input\\image"
+        model_path = "D:\\P.KTCN\\Try_on\\input\\image"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
         for model in model_list:
@@ -93,7 +93,7 @@ class ProductTemplate(models.Model):
 
         # migrate upper
         dem = 0
-        model_path = "D:\\Try_on\\input\\cloth"
+        model_path = "D:\\P.KTCN\\Try_on\\input\\cloth"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
         for model in model_list:

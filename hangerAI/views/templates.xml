@@ -31,7 +31,7 @@
             </div>
             <div class="tab-func">
                 <div class="icon d-none d-md-block"></div>
-                <a t-attf-href="/upscale-image">
+                <a t-attf-href="/upscale">
                     <span class="func_name">Upscale Image</span>
                 </a>
             </div>

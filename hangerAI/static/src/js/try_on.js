@@ -155,58 +155,59 @@ if (popup_change_model !== null){
         system_model.style.display = 'flex';
       }
     }
+
+
+    function showModal() {
+      var modal = document.getElementById('imageSizeModal');
+      modal.style.display = 'block';
+    }
+
+    // Function to handle the confirm button click event
+    function handleConfirmButtonClick() {
+      // Get the selected image size
+      var imageSizeSelect = document.getElementById('imageSizeSelect');
+      var imageSize = imageSizeSelect.value;
+      console.log(imageSize, "imageSize");
+
+      // Hide the modal
+      var modal = document.getElementById('imageSizeModal');
+      modal.style.display = 'none';
+
+      var myFormData = new FormData();
+        var modelImg = d_try_on.querySelector('.modelImg');
+        var file = modelImg.src
+        myFormData.append('upload_files', file);
+        myFormData.append('imageSize', imageSize);
+        $.ajax({
+          url: '/download_result',
+          type: 'POST',
+          processData: false,
+          contentType: false,
+          dataType : 'json',
+          data: myFormData,
+          success: function() {
+           },
+           error: function () {
+           }
+        });
+    }
+
+    // Function to handle the cancel button click event
+    function handleCancelButtonClick() {
+      var modal = document.getElementById('imageSizeModal');
+      modal.style.display = 'none';
+    }
+
+
+    // Add click event listener to the download button
+    var downloadButton = document.getElementById('downloadButton');
+    downloadButton.addEventListener('click', showModal);
+
+    // Add click event listener to the confirm button in the modal
+    var confirmButton = document.getElementById('confirmButton');
+    confirmButton.addEventListener('click', handleConfirmButtonClick);
+
+    // Add click event listener to the confirm button in the modal
+    var cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', handleCancelButtonClick);
 }
-
-function showModal() {
-  var modal = document.getElementById('imageSizeModal');
-  modal.style.display = 'block';
-}
-
-// Function to handle the confirm button click event
-function handleConfirmButtonClick() {
-  // Get the selected image size
-  var imageSizeSelect = document.getElementById('imageSizeSelect');
-  var imageSize = imageSizeSelect.value;
-  console.log(imageSize, "imageSize");
-
-  // Hide the modal
-  var modal = document.getElementById('imageSizeModal');
-  modal.style.display = 'none';
-
-  var myFormData = new FormData();
-    var modelImg = d_try_on.querySelector('.modelImg');
-    var file = modelImg.src
-    myFormData.append('upload_files', file);
-    myFormData.append('imageSize', imageSize);
-    $.ajax({
-      url: '/download_result',
-      type: 'POST',
-      processData: false,
-      contentType: false,
-      dataType : 'json',
-      data: myFormData,
-      success: function() {
-       },
-       error: function () {
-       }
-    });
-}
-
-// Function to handle the cancel button click event
-function handleCancelButtonClick() {
-  var modal = document.getElementById('imageSizeModal');
-  modal.style.display = 'none';
-}
-
-
-// Add click event listener to the download button
-var downloadButton = document.getElementById('downloadButton');
-downloadButton.addEventListener('click', showModal);
-
-// Add click event listener to the confirm button in the modal
-var confirmButton = document.getElementById('confirmButton');
-confirmButton.addEventListener('click', handleConfirmButtonClick);
-
-// Add click event listener to the confirm button in the modal
-var cancelButton = document.getElementById('cancelButton');
-cancelButton.addEventListener('click', handleCancelButtonClick);

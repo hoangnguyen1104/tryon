@@ -2,7 +2,7 @@
 <odoo>
     <template id="hanger_upscale_image" name="Hanger Upscale Image">
         <t t-call="website.layout">
-            <div class="upscale_image MediaSelector_GridContainer">
+            <div class="upscale_image MediaSelector_GridContainer row">
                 <div class="MediaSelector">
                     <div class="div-upload">
                         <div class="drag-area">

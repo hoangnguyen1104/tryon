@@ -18,6 +18,7 @@
         'views/template_try_on.xml',
         'views/template_upscale_image.xml',
         'views/template_tagging_image.xml',
+        'views/template_upscale.xml',
     ],
     'demo': [],
     'installable': True,

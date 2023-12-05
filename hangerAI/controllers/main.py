@@ -42,6 +42,7 @@ class HangerAPI(http.Controller):
         system_lowers = product_template.search([('detailed_type', '=', 'lower'), ('create_uid', '=', 1)])
         user_lowers = product_template.search([('detailed_type', '=', 'lower'), ('create_uid', '=', request.uid)])
         values = {
+            'default_model': system_models[0],
             'models': system_models,
             'user_models': user_models,
             'system_uppers': system_uppers,
@@ -55,8 +56,19 @@ class HangerAPI(http.Controller):
         '/upscale-image',
     ], type='http', auth="public", website=True)
     def upscale_image(self, **post):
-        values = {}
+        values = {
+        }
         return request.render("hangerAI.hanger_upscale_image", values)
+
+    @http.route([
+        '/upscale',
+    ], type='http', auth="public", website=True)
+    def upscale(self, **post):
+        product_template = request.env['product.template'].sudo()
+        values = {
+            "images": product_template.search([], limit=10)
+        }
+        return request.render("hangerAI.hanger_upscale", values)
 
     @http.route(['/upload_model'], type='http', auth="user",
                 website=True, csrf=False)
