@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+from werkzeug.utils import send_file
 
 import json
 import logging
@@ -42,7 +44,6 @@ class HangerAPI(http.Controller):
         system_lowers = product_template.search([('detailed_type', '=', 'lower'), ('create_uid', '=', 1)])
         user_lowers = product_template.search([('detailed_type', '=', 'lower'), ('create_uid', '=', request.uid)])
         values = {
-            'default_model': system_models[0],
             'models': system_models,
             'user_models': user_models,
             'system_uppers': system_uppers,
@@ -55,19 +56,31 @@ class HangerAPI(http.Controller):
     @http.route([
         '/upscale-image',
     ], type='http', auth="public", website=True)
-    def upscale_image(self, **post):
-        values = {
-        }
+    def upscale_image(self, **kwargs):
+        if kwargs.get('image_to_upscale'):
+            values = {
+                "default_image": kwargs.get('image_to_upscale').split(',')[1]
+            }
+        else:
+            values = {}
         return request.render("hangerAI.hanger_upscale_image", values)
 
     @http.route([
         '/upscale',
-    ], type='http', auth="public", website=True)
-    def upscale(self, **post):
+    ], type='http', auth="public", website=True, csrf=False)
+    def upscale(self, **kwargs):
         product_template = request.env['product.template'].sudo()
-        values = {
-            "images": product_template.search([], limit=10)
-        }
+        if kwargs.get('image_to_upscale'):
+            values = {
+                "default_image": 1,
+                "default_image_val": kwargs.get('image_to_upscale').split(',')[1],
+                "images": product_template.search([], limit=10)
+            }
+        else:
+            values = {
+                "images": product_template.search([], limit=10),
+                "default_image": 0
+            }
         return request.render("hangerAI.hanger_upscale", values)
 
     @http.route(['/upload_model'], type='http', auth="user",
@@ -238,12 +251,20 @@ class HangerAPI(http.Controller):
     ], type='http', auth="public", website=True, csrf=False)
     def download_result(self, **kwargs):
         import base64
-        image_data = kwargs.get('upload_files').split(',')[1]
+        kwargs.get('image_to_download')
+        image_data = kwargs.get('image_to_download').split(',')[1]
         decoded_image_data = base64.b64decode(image_data)
-
-        def download_file_from_decoded_data(decoded_data, file_path):
-            with open(file_path, 'wb') as file:
-                file.write(decoded_data)
-
-        file_path = 'D:\\ans.jpg'
-        download_file_from_decoded_data(decoded_image_data, file_path)
+        attachment_val = {
+            'name': 'tryon_result',
+            'datas': base64.b64encode(decoded_image_data),
+            'type': 'binary',
+        }
+        attachment = request.env['ir.attachment'].sudo().create(attachment_val)
+        return request.redirect('/web/content/%s?download=true' % attachment.id)
+        
+    @http.route([
+        '/to_upscale',
+    ], type='http', auth="public", website=True, csrf=False)
+    def to_upscale(self, **kwargs):
+        pass 
+        return request.redirect('/upscale')

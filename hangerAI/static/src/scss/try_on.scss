@@ -321,3 +321,8 @@
       transform: translateY(-50%);
     }
 }
+
+.modal-content form,
+.modal-content button {
+  width: 100%;
+}

@@ -6,16 +6,31 @@
                 <div class="container">
                     <div class="upload-result">
                         <div class="drag-area">
-                            <div class="select_image_up">
-                                <div class="icon">
-                                    <i class="fas fa-images"></i>
+                            <t t-if="default_image == 0">
+                                <div class="select_image_up">
+                                    <div class="icon">
+                                        <i class="fas fa-images"></i>
+                                    </div>
+                                    <span class="header">Drag &amp; Drop</span>
+                                    <span class="header">or <span class="button">browse</span></span>
+                                    <input type="file" id="upload" style="display:none"/>
+                                    <span class="support">Supports: JPEG, JPG, PNG</span>
                                 </div>
-                                <span class="header">Drag &amp; Drop</span>
-                                <span class="header">or <span class="button">browse</span></span>
-                                <input type="file" id="upload" style="display:none"/>
-                                <span class="support">Supports: JPEG, JPG, PNG</span>
-                            </div>
-                            <img class='image_upscale' style="display: none;" src="" alt=""/>
+                                <img class='image_upscale' style="display: none;" src="" alt=""/>
+                            </t>
+                            <t t-if="default_image == 1">
+                                <div class="select_image_up" style="display: none;">
+                                    <div class="icon">
+                                        <i class="fas fa-images"></i>
+                                    </div>
+                                    <span class="header">Drag &amp; Drop</span>
+                                    <span class="header">or <span class="button">browse</span></span>
+                                    <input type="file" id="upload" style="display:none"/>
+                                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                                </div>
+                                <img class='image_upscale' style="display: block;" t-attf-src="data:image/*;base64,{{default_image_val}}" alt=""/>
+                            </t>
+
                             <a class="clear-image">Tải lại</a>
                         </div>
                     </div>

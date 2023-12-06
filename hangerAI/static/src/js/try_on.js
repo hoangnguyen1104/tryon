@@ -24,10 +24,15 @@ if (d_try_on !== null) {
               dataType : 'json',
               data: myFormData,
               success: function(response) {
-                console.log(response);
                 var imageSrc = "data:" + response.content_type + ";base64," + response.image;
                 var modelImg = d_try_on.querySelector('.modelImg');
+                var image_to_download = d_try_on.querySelector('.image_to_download');
+                var image_to_upscale = d_try_on.querySelector('.image_to_upscale');
                 modelImg.src = imageSrc;
+                image_to_download.value = imageSrc;
+                image_to_upscale.value = imageSrc;
+                console.log(image_to_download);
+                console.log(image_to_upscale);
                },
                error: function (xhr, status, error) {
                 console.log('xhr:', xhr);
@@ -83,6 +88,8 @@ if (popup_change_model !== null){
             });
             d_try_on.querySelector('.save-model-id').value = image_options[i].getAttribute("name");
             d_try_on.querySelector('.modelImg').src = image_options[i].getElementsByTagName('input')[0].defaultValue;
+            d_try_on.querySelector('.image_to_upscale').value = image_options[i].getElementsByTagName('input')[0].defaultValue;
+            d_try_on.querySelector('.image_to_download').value = image_options[i].getElementsByTagName('input')[0].defaultValue;
             popup_change_model.style.display = 'none';
             d_try_on.style.display = 'contents';
         }
@@ -198,6 +205,28 @@ if (popup_change_model !== null){
       modal.style.display = 'none';
     }
 
+    // Function to handle the cancel button click event
+    function handleConfirmUpscale() {
+      var modelImg = d_try_on.querySelector('.modelImg');
+      var file = modelImg.src;
+      var myFormData = new FormData();
+      myFormData.append('file', file);
+      $.ajax({
+          url: '/upscale',
+          type: 'POST',
+          processData: false,
+          contentType: false,
+          dataType : 'json',
+          data: myFormData,
+          success: function(response) {
+            $('#targetElement').html(response);
+           },
+           error: function (response) {
+               $('#targetElement').html(response);
+           }
+        });
+    }
+
 
     // Add click event listener to the download button
     var downloadButton = document.getElementById('downloadButton');
@@ -205,9 +234,13 @@ if (popup_change_model !== null){
 
     // Add click event listener to the confirm button in the modal
     var confirmButton = document.getElementById('confirmButton');
-    confirmButton.addEventListener('click', handleConfirmButtonClick);
+    //confirmButton.addEventListener('click', handleConfirmButtonClick);
 
     // Add click event listener to the confirm button in the modal
     var cancelButton = document.getElementById('cancelButton');
     cancelButton.addEventListener('click', handleCancelButtonClick);
+
+    // Add click event listener to the confirm button in the modal
+    var confirmUpscale = document.getElementById('confirmUpscale');
+    confirmUpscale.addEventListener('click', handleConfirmUpscale);
 }

@@ -99,8 +99,14 @@
                     <!-- Modal -->
                     <div id="imageSizeModal" class="modal">
                       <div class="modal-content">
-                        <button id="confirmUpscale">Upscale Now</button>
-                        <button id="confirmButton">Download</button>
+                          <form class="" action="/upscale" method="post" enctype="multipart/form-data">
+                              <input type="hidden" class="image_to_upscale" name="image_to_upscale"/>
+                            <button id="confirmUpscale">Upscale Now</button>
+                          </form>
+                          <form class="" action="/download_result" method="post" enctype="multipart/form-data">
+                              <input type="hidden" class="image_to_download" name="image_to_download"/>
+                            <button id="confirmButton">Download</button>
+                          </form>
                          <button id="cancelButton">Cancel</button>
                       </div>
                     </div>
