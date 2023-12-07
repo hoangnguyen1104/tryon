@@ -68,22 +68,62 @@
                             <button class="option" onclick="selectOptionModel(2)">System Models</button>
                         </div>
                         <div class="modelsOptions your_model">
-                            <t t-foreach="user_models" t-as="model">
-                                <div class="modelsImg" t-attf-name="#{model.id}">
-                                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
-                                    style="display: none;"/>
-                                    <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
-                                </div>
-                            </t>
+                            <div class="upper-model" style="">
+                                <t t-foreach="user_upper_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="lower-model" style="display: none;">
+                                <t t-foreach="user_lower_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="dress-model" style="display: none;">
+                                <t t-foreach="user_dress_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
                         </div>
                         <div class="modelsOptions system_model" style="display:none;">
-                            <t t-foreach="models" t-as="model">
-                                <div class="modelsImg" t-attf-name="#{model.id}">
-                                    <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
-                                    style="display: none;"/>
-                                    <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
-                                </div>
-                            </t>
+                            <div class="upper-model">
+                                <t t-foreach="system_upper_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="lower-model" style="display: none;">
+                                <t t-foreach="system_lower_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="dress-model" style="display: none;">
+                                <t t-foreach="system_dress_models" t-as="model">
+                                    <div class="modelsImg" t-attf-name="#{model.id}">
+                                        <input type="file" class="input" t-attf-name="#{model.id}" t-att-value="image_data_uri(model.image_1920)"
+                                        style="display: none;"/>
+                                        <img t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
+                                    </div>
+                                </t>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,10 +151,10 @@
                       </div>
                     </div>
                 </div>
-                <a class="paste_model">
+                <div class="paste_model">
                     <input type="hidden" class="save-model-id" name="type-gallery" value=""/>
                     <img class="modelImg" src=""/>
-                </a>
+                </div>
             </div>
         </div>
     </template>
@@ -186,7 +226,7 @@
                             </t>
                       </div>
                     </div>
-                    <div id="bottoms" class="p-list" style="display: none;">
+                  <div id="bottoms" class="p-list" style="display: none;">
                       <div class="bottoms_your_gallery">
                             <t t-foreach="user_lowers" t-as="cloth">
                                   <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
@@ -206,6 +246,42 @@
                       </div>
                       <div class="bottoms_system_gallery" style="display: none;">
                             <t t-foreach="system_lowers" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}" alue="bottoms"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
+                    </div>
+                  <div id="outerwear" class="p-list" style="display: none;">
+                      <div class="dresses_your_gallery">
+                            <t t-foreach="user_dresses" t-as="cloth">
+                                  <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
+                                    <input type="file" class="input" t-attf-name="#{cloth.id}" value="bottoms"
+                                            style="display: none;"/>
+                                    <img t-attf-name="symbol_#{cloth.id}" class="productImg" t-att-src="image_data_uri(cloth.image_1920)"/>
+                                    <div class="saveIcon" t-attf-name="symbol_#{cloth.id}">
+                                        <div>
+                                            <img class="heart-icon" src="https://revery-integration-tools.s3.us-east-2.amazonaws.com/images/heart.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="productNameDiv">
+                                        <p class="product" t-attf-name="symbol_#{cloth.id}" target="_blank"><t t-esc="cloth.name"/></p>
+                                    </div>
+                                  </div>
+                            </t>
+                      </div>
+                      <div class="dresses_system_gallery" style="display: none;">
+                            <t t-foreach="system_dresses" t-as="cloth">
                                   <div t-attf-name="symbol_#{cloth.id}" class="productImgContainer" t-attf-id="revery_symbol_#{cloth.id}">
                                     <input type="file" class="input" t-attf-name="#{cloth.id}" alue="bottoms"
                                             style="display: none;"/>

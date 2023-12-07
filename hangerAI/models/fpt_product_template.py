@@ -21,13 +21,26 @@ class ProductTemplate(models.Model):
     detailed_type = fields.Selection(selection_add=[
         ('model', 'Người mẫu'),
         ('upper', 'Áo'),
-        ('lower', 'Quần')],
+        ('lower', 'Quần'),
+        ('dress', 'Váy')
+    ],
         ondelete={
             'model': 'set service',
             'upper': 'set service',
             'lower': 'set service',
+            'dress': 'set service',
         }
     )
+    # update
+    type_model = fields.Char()
+    cloth_align = fields.Binary()
+    cloth_align_mask = fields.Binary()
+    cloth_align_parse = fields.Binary()
+
+    parse_bytedance = fields.Binary()
+    pose_25 = fields.Binary()
+    ####
+
 
     cloth_model = fields.Binary()
     cloth_mask_model = fields.Binary()
@@ -47,12 +60,19 @@ class ProductTemplate(models.Model):
         type_mapping['model'] = 'service'
         type_mapping['upper'] = 'service'
         type_mapping['lower'] = 'service'
+        type_mapping['dress'] = 'service'
         return type_mapping
 
     def migrate_data(self):
+
+        product_temp = self.env['product.template']
+        miss_models = product_temp.sudo().search([('detailed_type', '=', 'model'), ('cloth_align', '=', False)])
+        miss_models.unlink()
+        return
+
         def get_from(model, folderName):
-            key = model[:5]
-            item_path = f"D:\\P.KTCN\\Try_on\\input\\{folderName}"
+            key = model[:6]
+            item_path = f"E:\\GP-VTON\\GP-VTON\\dataset\\Dresscode\\dresses\\{folderName}"
             item_list = os.listdir(item_path)
             for item in item_list:
                 if item.startswith(key):
@@ -64,7 +84,7 @@ class ProductTemplate(models.Model):
 
         # migrate model
         dem = 0
-        model_path = "D:\\P.KTCN\\Try_on\\input\\image"
+        model_path = "E:\\GP-VTON\\GP-VTON\\dataset\\Dresscode\\dresses\\image"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
         for model in model_list:
@@ -78,22 +98,21 @@ class ProductTemplate(models.Model):
                     binary_data = image_file.read()
                     encoded_data = base64.b64encode(binary_data)
                     product.create({
-                        'name': model[:5],
+                        'name': model[:6],
                         'detailed_type': 'model',
+                        'type_model': 'dress',
                         'image_1920': encoded_data,
-                        'agonostic_v32': get_from(model,"agnostic-v3.2"),
-                        'densepose': get_from(model,"image-densepose"),
-                        'parse_agonostic_v32': get_from(model,"image-parse-agnostic-v3.2"),
-                        'parse_v3': get_from(model,"image-parse-v3"),
-                        'openpose_img': get_from(model,"openpose_img"),
-                        'openpose_json': get_from(model,"openpose_json"),
-                        'cloth_model': get_from(model, "cloth"),
-                        'cloth_mask_model': get_from(model, "cloth-mask"),
+                        'parse_bytedance': get_from(model,"parse-bytedance"),
+                        'densepose': get_from(model,"densepose"),
+                        'pose_25': get_from(model,"pose_25"),
+                        'cloth_align': get_from(model,"cloth_align"),
+                        'cloth_align_mask': get_from(model, "cloth_align_mask-bytedance"),
+                        'cloth_align_parse': get_from(model, "cloth_align_parse-bytedance"),
                     })
 
-        # migrate upper
+        # migrate cloths
         dem = 0
-        model_path = "D:\\P.KTCN\\Try_on\\input\\cloth"
+        model_path = "E:\\GP-VTON\\GP-VTON\\dataset\\Dresscode\\dresses\\cloth_align"
         model_list = os.listdir(model_path)
         product = self.env['product.template']
         for model in model_list:
@@ -107,10 +126,11 @@ class ProductTemplate(models.Model):
                     binary_data = image_file.read()
                     encoded_data = base64.b64encode(binary_data)
                     product.create({
-                        'name': model[:5],
-                        'detailed_type': 'upper',
+                        'name': model[:6],
+                        'detailed_type': 'dress',
                         'image_1920': encoded_data,
-                        'mask': get_from(model, "cloth-mask"),
+                        'cloth_align_mask': get_from(model, "cloth_align_mask-bytedance"),
+                        'cloth_align_parse': get_from(model, "cloth_align_parse-bytedance"),
                     })
 
 

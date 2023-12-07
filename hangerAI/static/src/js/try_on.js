@@ -2,9 +2,46 @@ const d_try_on = document.querySelector(".try_on_frame");
 if (d_try_on !== null) {
     let changeModelButton = d_try_on.querySelector(".changeModelButton");
     changeModelButton.onclick = () => {
+        let type_gallery = document.querySelector(".type-gallery");
+        let upper_model = document.querySelectorAll(".upper-model");
+        let lower_model = document.querySelectorAll(".lower-model");
+        let dress_model = document.querySelectorAll(".dress-model");
+        console.log(upper_model);
+        console.log(lower_model);
+        console.log(dress_model);
+
+        for (var i=0; i<upper_model.length; i++){
+            console.log(upper_model[i]);
+            upper_model[i].style.display = 'none';
+        }
+
+        for (var i=0; i<lower_model.length; i++)
+            lower_model[i].style.display = 'none';
+        for (var i=0; i<dress_model.length; i++)
+            dress_model[i].style.display = 'none';
+
+        console.log(type_gallery, "type_gallerytype_gallery");
+
+        if (type_gallery.value === 'tops'){
+            console.log('tops');
+            for (var i=0; i<upper_model.length; i++)
+            upper_model[i].style.display = 'contents';
+        }
+        if (type_gallery.value === 'bottoms'){
+            console.log('bottoms');
+            for (var i=0; i<lower_model.length; i++)
+            lower_model[i].style.display = 'contents';
+        }
+        if (type_gallery.value === 'outerwear'){
+            console.log('outerwear');
+            for (var i=0; i<dress_model.length; i++)
+            dress_model[i].style.display = 'contents';
+        }
+
         let popup_change_model = document.querySelector(".popup_change_model");
+        console.log(popup_change_model);
         popup_change_model.style.display = 'contents';
-        d_try_on.style.display = 'none';
+         d_try_on.style.display = 'none';
     };
 
     let productImgContainer = d_try_on.querySelectorAll(".productImgContainer");
@@ -53,6 +90,10 @@ if (d_try_on !== null) {
             console.log(selectCategory[i].getAttribute("name"));
             type_gallery.value = selectCategory[i].getAttribute("name");
             let name = selectCategory[i].getAttribute("name");
+
+            var modelImg = d_try_on.querySelector('.modelImg');
+            modelImg.src = false;
+
             for (let j=0; j<list_cate_products.length; j++){
                 list_cate_products[j].style.display = 'none';
                 console.log(list_cate_products[j]);
@@ -131,6 +172,10 @@ if (popup_change_model !== null){
       if (type_gallery == "bottoms"){
         your_cloth = document.querySelector(".bottoms_your_gallery");
         system_cloth = document.querySelector(".bottoms_system_gallery");
+      }
+      if (type_gallery == "outerwear"){
+        your_cloth = document.querySelector(".dresses_your_gallery");
+        system_cloth = document.querySelector(".dresses_system_gallery");
       }
       if (option==1){
         your_cloth.style.display = 'block';

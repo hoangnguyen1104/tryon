@@ -23,17 +23,15 @@
                 <page name="preprocess" string="Preprocess">
                     <group>
                         <group>
-                            <field name="agonostic_v32"/>
+                            <field name="type_model"/>
                             <field name="densepose"/>
-                            <field name="parse_agonostic_v32"/>
-                            <field name="parse_v3"/>
+                            <field name="parse_bytedance"/>
+                            <field name="pose_25"/>
                         </group>
                         <group>
-                            <field name="openpose_img"/>
-                            <field name="openpose_json"/>
-                            <field name="mask"/>
-                            <field name="cloth_model"/>
-                            <field name="cloth_mask_model"/>
+                            <field name="cloth_align"/>
+                            <field name="cloth_align_mask"/>
+                            <field name="cloth_align_parse"/>
                         </group>
                     </group>
                 </page>

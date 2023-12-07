@@ -11,6 +11,7 @@
 }
 
 .modelFrame .modelImg{
+    margin-top: 10% !important;
     max-width: 100%;
     max-height: 800px;
     margin: 0 auto;
@@ -325,4 +326,8 @@
 .modal-content form,
 .modal-content button {
   width: 100%;
+}
+
+.upper-model {
+    display: contents;
 }
