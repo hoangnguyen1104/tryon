@@ -138,8 +138,10 @@ if (popup_change_model !== null){
 
     function saveData() {
         var myFormData = new FormData();
+        let type_gallery = document.querySelector(".type-gallery").value;
         var file = document.getElementsByClassName('i-upload-model')[0].files[0];
         myFormData.append('upload_files', file);
+        myFormData.append('type_gallery', type_gallery);
         $.ajax({
           url: '/upload_model',
           type: 'POST',

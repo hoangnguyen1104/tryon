@@ -35,18 +35,18 @@ class HangerAPI(http.Controller):
     def try_on(self, **post):
         product_template = request.env['product.template'].sudo()
         # model
-        system_lower_models = product_template.search([('detailed_type', '=', 'model'), ('type_model', '=', 'lower'), ('create_uid', '=', 1)])
-        user_lower_models = product_template.search([('detailed_type', '=', 'model'), ('type_model', '=', 'lower'), ('create_uid', '=', request.uid)])
+        system_lower_models = product_template.search([('detailed_type', '=', 'model'), ('type_model', '=', 'lower_gp'), ('create_uid', '=', 1)])
+        user_lower_models = product_template.search([('detailed_type', '=', 'model'), ('type_model', '=', 'lower_gp'), ('create_uid', '=', request.uid)])
 
         system_upper_models = product_template.search(
-            [('detailed_type', '=', 'model'), ('type_model', '=', 'upper'), ('create_uid', '=', 1)])
+            [('detailed_type', '=', 'model'), ('type_model', '=', 'upper_hr'), ('create_uid', '=', 1)])
         user_upper_models = product_template.search(
-            [('detailed_type', '=', 'model'), ('type_model', '=', 'upper'), ('create_uid', '=', request.uid)])
+            [('detailed_type', '=', 'model'), ('type_model', '=', 'upper_hr'), ('create_uid', '=', request.uid)])
 
         system_dress_models = product_template.search(
-            [('detailed_type', '=', 'model'), ('type_model', '=', 'dress'), ('create_uid', '=', 1)])
+            [('detailed_type', '=', 'model'), ('type_model', '=', 'dress_gp'), ('create_uid', '=', 1)])
         user_dress_models = product_template.search(
-            [('detailed_type', '=', 'model'), ('type_model', '=', 'dress'), ('create_uid', '=', request.uid)])
+            [('detailed_type', '=', 'model'), ('type_model', '=', 'dress_gp'), ('create_uid', '=', request.uid)])
 
         # upper
         system_uppers = product_template.search([('detailed_type', '=', 'upper'), ('create_uid', '=', 1)])
@@ -84,6 +84,8 @@ class HangerAPI(http.Controller):
             }
         else:
             values = {}
+        product_template = request.env['product.template'].sudo()
+        products = product_template.search([('create_uid', '=', request.uid)])
         return request.render("hangerAI.hanger_upscale_image", values)
 
     @http.route([
@@ -102,11 +104,27 @@ class HangerAPI(http.Controller):
                 "images": product_template.search([], limit=10),
                 "default_image": 0
             }
+        product_template = request.env['product.template'].sudo()
+        products = product_template.search([('create_uid', '=', request.uid)])
+        if len(products) == 0:
+            products = product_template.search([], limit=20)
+
+        values.update({
+            'products': products
+        })
         return request.render("hangerAI.hanger_upscale", values)
 
     @http.route(['/upload_model'], type='http', auth="user",
                 website=True, csrf=False)
     def upload_model(self, **kwargs):
+        type_gallery = kwargs.get('type_gallery')
+        type_model = False
+        if type_gallery == 'tops':
+            type_model = 'upper_hr'
+        if type_gallery == 'bottoms':
+            type_model = 'lower_gp'
+        if type_gallery == 'outerwear':
+            type_model = 'dress_gp'
         import base64
         def encode_image_to_base64(file_storage):
             encoded_string = base64.b64encode(file_storage.read())
@@ -118,6 +136,7 @@ class HangerAPI(http.Controller):
             new_model = product.create({
                 'name': file.filename,
                 'detailed_type': 'model',
+                'type_model': type_model,
                 'image_1920': encode_image_to_base64(file)
             })
         except Exception as e:
@@ -133,6 +152,8 @@ class HangerAPI(http.Controller):
             detailed_type = 'upper'
         if type_gallery == 'bottoms':
             detailed_type = 'lower'
+        if type_gallery == 'outerwear':
+            detailed_type = 'dress'
 
         import base64
         def encode_image_to_base64(file_storage):
@@ -166,14 +187,19 @@ class HangerAPI(http.Controller):
         import base64
         import os
         import shutil
-        def make_folder_emp(folder):
-            folder_path = 'E:\\test-try-on\\' + folder
+        def make_folder_emp(folder, model):
+            folder_path = 'D:\\test-try-on-hr\\' + folder
+            if model.type_model in ('lower_gp', 'dress_gp'):
+                folder_path = 'D:\\test-try-on-gp\\' + folder
+
             if os.path.exists(folder_path):
                 shutil.rmtree(folder_path)
             os.makedirs(folder_path)
 
-        def make_folder(folder, file, type_file, name_file):
-            folder_path = 'E:\\test-try-on\\' + folder
+        def make_folder(folder, file, type_file, name_file, model):
+            folder_path = 'D:\\test-try-on-hr\\' + folder
+            if model.type_model in ('lower_gp', 'dress_gp'):
+                folder_path = 'D:\\test-try-on-gp\\' + folder
 
             if os.path.exists(folder_path):
                 shutil.rmtree(folder_path)
@@ -192,15 +218,28 @@ class HangerAPI(http.Controller):
 
         product_template = request.env['product.template']
         model = product_template.browse(int(kwargs.get('model_id')))
-        make_folder("image", model.image_1920, ".png", model.name + "_0")
-        make_folder("densepose", model.densepose, ".png", model.name + "_0")
-        make_folder("parse-bytedance", model.parse_bytedance, ".png", model.name + "_0")
-        make_folder("pose_25", model.pose_25, ".png.npy", model.name + "_0")
-        make_folder_emp("cloth_warped_gt")
-        make_folder_emp("image_gt")
-        make_folder("cloth_align", model.cloth_align, ".png", model.name + "_1")
-        make_folder("cloth_align_mask-bytedance", model.cloth_align_mask, ".png", model.name + "_1")
-        make_folder("cloth_align_parse-bytedance", model.cloth_align_parse, ".png", model.name + "_1")
+
+        if model.type_model == 'upper_hr':
+            make_folder("agnostic-v3.2", model.agonostic_v32, ".jpg", model.name + "_00", model)
+            make_folder("image", model.image_1920, ".jpg", model.name + "_00", model)
+            make_folder("image-densepose", model.densepose, ".jpg", model.name + "_00", model)
+            make_folder("image-parse-agnostic-v3.2", model.parse_agonostic_v32, ".png", model.name + "_00", model)
+            make_folder("image-parse-v3", model.parse_v3, ".png", model.name + "_00", model)
+            make_folder("openpose_img", model.openpose_img, ".png", model.name + "_00_rendered", model)
+            make_folder("openpose_json", model.openpose_json, ".json", model.name + "_00_keypoints", model)
+            make_folder("cloth", model.cloth_model, ".jpg", model.name + "_00", model)
+            make_folder("cloth-mask", model.cloth_mask_model, ".jpg", model.name + "_00", model)
+
+        if model.type_model in ('lower_gp', 'dress_gp'):
+            make_folder("image", model.image_1920, ".png", model.name + "_0", model)
+            make_folder("densepose", model.densepose, ".png", model.name + "_0", model)
+            make_folder("parse-bytedance", model.parse_bytedance, ".png", model.name + "_0", model)
+            make_folder("pose_25", model.pose_25, ".png.npy", model.name + "_0", model)
+            make_folder_emp("cloth_warped_gt", model)
+            make_folder_emp("image_gt", model)
+            make_folder("cloth_align", model.cloth_align, ".png", model.name + "_1", model)
+            make_folder("cloth_align_mask-bytedance", model.cloth_align_mask, ".png", model.name + "_1", model)
+            make_folder("cloth_align_parse-bytedance", model.cloth_align_parse, ".png", model.name + "_1", model)
 
     @http.route([
         '/mkdir_cloth',
@@ -209,8 +248,10 @@ class HangerAPI(http.Controller):
         import base64
         import os
         import shutil
-        def make_folder(folder, file, type_file, name_file):
-            folder_path = 'E:\\test-try-on\\' + folder
+        def make_folder(folder, file, type_file, name_file, model):
+            folder_path = 'D:\\test-try-on-hr\\' + folder
+            if model.type_model in ('lower_gp', 'dress_gp'):
+                folder_path = 'D:\\test-try-on-gp\\' + folder
 
             # Set the file path including the folder path and file name with the .jpg extension
             file_path = os.path.join(folder_path, name_file + type_file)
@@ -228,9 +269,13 @@ class HangerAPI(http.Controller):
         model = product_template.browse(int(kwargs.get('model_id')))
         image_binary = base64.b64decode(cloth.image_1920)
 
-        make_folder("cloth_align", cloth.image_1920, ".png", cloth.name + "_1")
-        make_folder("cloth_align_mask-bytedance", cloth.cloth_align_mask, ".png", cloth.name + "_1")
-        make_folder("cloth_align_parse-bytedance", cloth.cloth_align_parse, ".png", cloth.name + "_1")
+        if model.type_model == 'upper_hr':
+            make_folder("cloth", cloth.image_1920, ".jpg", cloth.name + "_00", model)
+            make_folder("cloth-mask", cloth.mask, ".jpg", cloth.name + "_00", model)
+        if model.type_model in ('lower_gp', 'dress_gp'):
+            make_folder("cloth_align", cloth.image_1920, ".png", cloth.name + "_1", model)
+            make_folder("cloth_align_mask-bytedance", cloth.cloth_align_mask, ".png", cloth.name + "_1", model)
+            make_folder("cloth_align_parse-bytedance", cloth.cloth_align_parse, ".png", cloth.name + "_1", model)
 
         url = 'http://127.0.0.1:5000/process_image'
 

@@ -13,6 +13,7 @@
     'data': [
         'data/data.xml',
         'data/cron.xml',
+        'data/new_cron.xml',
         'views/fpt_product_template_view.xml',
         'views/templates.xml',
         'views/template_try_on.xml',
