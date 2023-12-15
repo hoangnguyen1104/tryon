@@ -235,12 +235,12 @@ if (t_upscale !== null) {
                 console.log('xhr:', response.image);
                 var imageSrc = "data:" + response.content_type + ";base64," + response.image;
                 var image_upscale = document.querySelector('.image_upscale');
-                image_upscale.src = false;
+                image_upscale.src = image_upscale;
                },
                error: function (xhr, status, error) {
-//                console.log('xhr:', xhr);
-//                console.log('status:', status);
-//                console.log('error:', error);
+                console.log('xhr:', xhr);
+                console.log('status:', status);
+                console.log('error:', error);
                }
             });
     };

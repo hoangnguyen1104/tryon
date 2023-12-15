@@ -362,7 +362,8 @@ class HangerAPI(http.Controller):
     ], type='http', auth="public", website=True, csrf=False)
     def to_upscale(self, **kwargs):
         import base64
-        file_path = "E:\\Try_on\\image.jpg"
+
+        file_path = "D:\\test-StableSR\\input.jpg"
         # Decode the binary data from base64
         image_data = kwargs.get('image').split(',')[1]
         decoded_image_data = base64.b64decode(image_data)
@@ -371,6 +372,42 @@ class HangerAPI(http.Controller):
         with open(file_path, 'wb') as file:
             # Write the binary data to the file
             file.write(decoded_image_data)
+
+        with open(file_path, 'rb') as file:
+            image_bytes = file.read()
+        url = 'https://38de-36-225-172-196.ngrok-free.app/upscaleImage'
+        params = {
+            "image_bytes": base64.b64encode(image_bytes).decode('utf-8'),
+            'scale': 4.0
+        }
+
+        # Make the POST request
+        try:
+            response = requests.post(url, params=params)
+        except Exception as e:
+            print(e)
+
+        # Check the response status code
+        if response.status_code == 200:
+            # Request was successful
+            byte_string = response.content
+            string = byte_string.decode('utf-8')
+            prefix = '{"base64_samples":"'
+            suffix = "'}"
+
+            inner_string = string[len(prefix):-len(suffix)]
+            image_data = base64.b64decode(inner_string)
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+            response_data = {
+                'image': image_base64,
+                'content_type': 'image/jpeg',
+                'filename': 'image.jpg'
+            }
+            return json.dumps(response_data)
+        else:
+            # Request failed
+            print('Request failed with status code:', response.status_code)
+
         response_data = {
             'image': base64.b64encode(decoded_image_data).decode('utf-8'),
             'content_type': 'image/jpeg',

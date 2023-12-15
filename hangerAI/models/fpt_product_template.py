@@ -158,7 +158,7 @@ class ProductTemplate(models.Model):
                     return encoded_data
 
     def migrate_data_hr(self):
-        root = "D:\\P.KTCN\\Try_on\\input\\"
+        root = "D:\\code\\Python\\HangersAI\\Try_on\\input\\"
         product = self.env['product.template']
 
         # import model
@@ -207,7 +207,7 @@ class ProductTemplate(models.Model):
                     })
 
     def migrate_data_gp_lower(self):
-        root = "D:\\P.KTCN\\GP-VTON\\dataset\\Dresscode\\lower\\"
+        root = "D:\\code\\Python\\HangersAI\\GP-VTON\\dataset\\Dresscode\\lower\\"
         product = self.env['product.template']
 
         # import model
@@ -254,7 +254,7 @@ class ProductTemplate(models.Model):
                     })
 
     def migrate_data_gp_dress(self):
-        root = "D:\\P.KTCN\\GP-VTON\\dataset\\Dresscode\\\dresses\\"
+        root = "D:\\code\\Python\\HangersAI\\GP-VTON\\dataset\\Dresscode\\dresses\\"
         product = self.env['product.template']
 
         # import model
