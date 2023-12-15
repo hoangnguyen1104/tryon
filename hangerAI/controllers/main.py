@@ -277,13 +277,29 @@ class HangerAPI(http.Controller):
             make_folder("cloth_align_mask-bytedance", cloth.cloth_align_mask, ".png", cloth.name + "_1", model)
             make_folder("cloth_align_parse-bytedance", cloth.cloth_align_parse, ".png", cloth.name + "_1", model)
 
-        url = 'http://127.0.0.1:5000/process_image'
-
         # Parameters for the request (image and cloth names)
         params = {
             'image': model.name,
             'cloth': cloth.name
         }
+
+        if model.type_model == 'upper_hr':
+            url = 'http://127.0.0.1:5000/process_image'
+
+        if model.type_model in ('lower_gp', 'dress_gp'):
+            url = 'https://81a5-81-166-162-13.ngrok-free.app/try-lower'
+            if cloth.detailed_type == 'dress':
+                params.update({
+                    'type': 'dresses'
+                })
+            elif cloth.detailed_type == 'lower':
+                params.update({
+                    'type': 'lower'
+                })
+            elif cloth.detailed_type == 'upper':
+                params.update({
+                    'type': 'upper'
+                })
 
         # Make the POST request
         try:
@@ -298,8 +314,14 @@ class HangerAPI(http.Controller):
             string = byte_string.decode('utf-8')
             prefix = '{"files":"b\''
             suffix = "\'}\n"
+            if model.type_model in ('lower_gp', 'dress_gp'):
+                prefix = '{"base64_samples":"'
+                suffix = "'}"
+
             inner_string = string[len(prefix):-len(suffix)]
             image_data = base64.b64decode(inner_string[:-1])
+            if model.type_model in ('lower_gp', 'dress_gp'):
+                image_data = base64.b64decode(inner_string)
             image_base64 = base64.b64encode(image_data).decode('utf-8')
             response_data = {
                 'image': image_base64,
@@ -339,5 +361,19 @@ class HangerAPI(http.Controller):
         '/to_upscale',
     ], type='http', auth="public", website=True, csrf=False)
     def to_upscale(self, **kwargs):
-        pass 
-        return request.redirect('/upscale')
+        import base64
+        file_path = "E:\\Try_on\\image.jpg"
+        # Decode the binary data from base64
+        image_data = kwargs.get('image').split(',')[1]
+        decoded_image_data = base64.b64decode(image_data)
+
+        # Open the file in binary write mode
+        with open(file_path, 'wb') as file:
+            # Write the binary data to the file
+            file.write(decoded_image_data)
+        response_data = {
+            'image': base64.b64encode(decoded_image_data).decode('utf-8'),
+            'content_type': 'image/jpeg',
+            'filename': 'image.jpg'
+        }
+        return json.dumps(response_data)

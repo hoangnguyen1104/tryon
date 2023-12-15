@@ -217,23 +217,31 @@ if (t_upscale !== null) {
 
           let image_upscale = input.files[0];
           let upscale_val = document.getElementById("upscale_val");
-          try {
-              const result = await toBase64(file);
-              var xhr = new XMLHttpRequest();
-              var url = 'https://api.example.com/data?image=' + result + '&scale=' + upscale_val.value;
-              xhr.open('GET', url, true);
 
-              xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                  var response = xhr.responseText;
-                  // Process the response data as needed
-                  console.log(response);
-                }
-              };
+          var myFormData = new FormData();
+          const result = await toBase64(file);
+          myFormData.append('image', result);
+          myFormData.append('scale', upscale_val.value);
+          myFormData.append('res_id', 'null');
 
-              xhr.send();
-           } catch(error) {
-              console.error(error);
-           }
+          $.ajax({
+              url: '/to_upscale',
+              type: 'POST',
+              processData: false,
+              contentType: false,
+              dataType : 'json',
+              data: myFormData,
+              success: function(response) {
+                console.log('xhr:', response.image);
+                var imageSrc = "data:" + response.content_type + ";base64," + response.image;
+                var image_upscale = document.querySelector('.image_upscale');
+                image_upscale.src = false;
+               },
+               error: function (xhr, status, error) {
+//                console.log('xhr:', xhr);
+//                console.log('status:', status);
+//                console.log('error:', error);
+               }
+            });
     };
 }
