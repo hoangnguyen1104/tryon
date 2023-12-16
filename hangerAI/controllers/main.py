@@ -362,23 +362,12 @@ class HangerAPI(http.Controller):
     ], type='http', auth="public", website=True, csrf=False)
     def to_upscale(self, **kwargs):
         import base64
-
-        file_path = "D:\\test-StableSR\\input.jpg"
-        # Decode the binary data from base64
         image_data = kwargs.get('image').split(',')[1]
-        decoded_image_data = base64.b64decode(image_data)
 
-        # Open the file in binary write mode
-        with open(file_path, 'wb') as file:
-            # Write the binary data to the file
-            file.write(decoded_image_data)
-
-        with open(file_path, 'rb') as file:
-            image_bytes = file.read()
         url = 'https://38de-36-225-172-196.ngrok-free.app/upscaleImage'
         params = {
-            "image_bytes": base64.b64encode(image_bytes).decode('utf-8'),
-            'scale': 4.0
+            "image_bytes": image_data,
+            'scale': float(kwargs.get('scale'))
         }
 
         # Make the POST request
@@ -408,8 +397,10 @@ class HangerAPI(http.Controller):
             # Request failed
             print('Request failed with status code:', response.status_code)
 
+        cloth = request.env['product.template'].sudo().search([], limit=1)
+        image_binary = base64.b64decode(cloth.image_1920)
         response_data = {
-            'image': base64.b64encode(decoded_image_data).decode('utf-8'),
+            'image': base64.b64encode(image_binary).decode('utf-8'),
             'content_type': 'image/jpeg',
             'filename': 'image.jpg'
         }
