@@ -46,11 +46,11 @@
     .drag-area .header {
       font-size: 20px;
       font-weight: 500;
-      color: #34495e;
+      color: #99678E;
     }
     .drag-area .support {
       font-size: 12px;
-      color: gray;
+      color: #99678E;
       margin: 10px 0 15px 0;
     }
     .drag-area .button {
@@ -155,11 +155,11 @@
     .drag-area .header {
       font-size: 20px;
       font-weight: 500;
-      color: #34495e;
+      color: #99678E;
     }
     .drag-area .support {
       font-size: 12px;
-      color: gray;
+      color: #99678E;
       margin: 10px 0 15px 0;
     }
     .drag-area .button {
@@ -179,4 +179,60 @@
 .image_upscale {
     height: 700px;
     width: 525px;
+}
+
+.input_image_size{
+    border: unset;
+}
+
+.wi-100{
+    width: 50%;
+}
+
+.d-size-result {
+    display: flex;
+}
+
+.d-size-origin {
+    display: flex;
+}
+
+.image_title {
+    display: flow;
+}
+
+body {
+    color: #99678E;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #99678E !important;
+}
+
+.navbar-light .navbar-nav .show > .nav-link, .navbar-light .navbar-nav .nav-link.active {
+    color: #99678E !important;
+}
+
+.box_setting {
+    margin-top: 20px;
+}
+
+.btn-group-setting{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.btn-item-c {
+    border: 1px solid #99678E;
+    color: white;
+    background-color: #99678E;
+}
+
+.s_text_block {
+    display: none;
+}
+
+.clear-image {
+    color: #99678E;
 }

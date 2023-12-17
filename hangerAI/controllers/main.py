@@ -93,10 +93,32 @@ class HangerAPI(http.Controller):
         '/upscale',
     ], type='http', auth="public", website=True, csrf=False)
     def upscale(self, **kwargs):
+        import base64
+        import io
+        from PIL import Image
+
+        def get_image_size_from_base64(base64_data):
+            # Decode the base64 image data
+            image_data = base64.b64decode(base64_data)
+
+            # Create an in-memory file object
+            image_file = io.BytesIO(image_data)
+
+            # Open the image file using PIL
+            image = Image.open(image_file)
+
+            # Get the image dimensions
+            width, height = image.size
+
+            return width, height
+
         product_template = request.env['product.template'].sudo()
         if kwargs.get('image_to_upscale'):
+            width, height = get_image_size_from_base64(kwargs.get('image_to_upscale').split(',')[1])
             values = {
                 "default_image": 1,
+                "width": width,
+                "height": height,
                 "default_image_val": kwargs.get('image_to_upscale').split(',')[1],
                 "images": product_template.search([], limit=10)
             }
