@@ -65,6 +65,7 @@ if (d_upscale_image !== null) {
                   let upscale_image = document.querySelector(".upscale_image");
                   let image_size = upscale_image.querySelector(".image_size");
                   image_size.innerHTML = this.width + 'x' + this.height;
+                  console.log(image_size);
                 }
               image_upscale.src = fileURL;
             };
@@ -85,6 +86,8 @@ if (d_upscale_image !== null) {
         let select_image_up = dropArea.querySelector('.select_image_up');
         image_upscale.style.display = "none";
         select_image_up.style.display = "contents";
+        document.querySelector(".input_image_size").innerHTML = '';
+        document.querySelector(".image_size").innerHTML = '';
     };
 
     // action process upscale
@@ -171,31 +174,38 @@ if (t_upscale !== null) {
     });
 
     function displayFile() {
-      let fileType = file.type;
+        if (file != null){
+            let fileType = file.type;
 
-      let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+          let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
 
-      if (validExtensions.includes(fileType)) {
-        let fileReader = new FileReader();
+          if (validExtensions.includes(fileType)) {
+            let fileReader = new FileReader();
 
-        fileReader.onload = () => {
-          let fileURL = fileReader.result;
-          let image_upscale = dropArea.querySelector('.image_upscale');
-          let select_image_up = dropArea.querySelector('.select_image_up');
+            fileReader.onload = () => {
+              let fileURL = fileReader.result;
+              let image_upscale = dropArea.querySelector('.image_upscale');
+              let select_image_up = dropArea.querySelector('.select_image_up');
 
-          select_image_up.style.display = "none";
-          image_upscale.style.display = "block";
-          image_upscale.onload = function() {
-              let image_size = document.querySelector(".image_size");
-              image_size.innerHTML = this.width + 'x' + this.height;
-            }
-          image_upscale.src = fileURL;
-        };
-        fileReader.readAsDataURL(file);
-      } else {
-        alert("This is not an Image File");
-        dropArea.classList.remove("active");
-      }
+              select_image_up.style.display = "none";
+              image_upscale.style.display = "block";
+              image_upscale.src = fileURL;
+              var image = new Image();
+              image.onload = function() {
+                    var width = this.width;
+                    var height = this.height;
+                    document.querySelector(".image_size").innerHTML = width + 'x' + height;
+                };
+              image.src = fileURL;
+              document.querySelector(".origin_image_upscale").src = fileURL;
+            };
+            fileReader.readAsDataURL(file);
+          } else {
+            alert("This is not an Image File");
+            dropArea.classList.remove("active");
+          }
+        }
+
     }
 
     // action tai lai
@@ -207,6 +217,14 @@ if (t_upscale !== null) {
         let select_image_up = dropArea.querySelector('.select_image_up');
         image_upscale.style.display = "none";
         select_image_up.style.display = "contents";
+        document.querySelector(".input_image_size").innerHTML = '';
+        document.querySelector(".image_size").innerHTML = '';
+    };
+
+    // action btn_toggle_origin
+    let btn_toggle_origin = upscale_image.querySelector(".btn_toggle_origin");
+    btn_toggle_origin.onclick = () => {
+        document.querySelector(".image_upscale").src = document.querySelector(".origin_image_upscale").src;
     };
 
     // action process upscale
@@ -223,10 +241,10 @@ if (t_upscale !== null) {
           let upscale_val = document.getElementById("upscale_val");
           var myFormData = new FormData();
           if (input.files[0] != undefined){
-            const result = await toBase64(file);
+            const result = document.querySelector(".origin_image_upscale").src;
             myFormData.append('image', result);
           } else {
-            const result2 = document.querySelector(".image_upscale").src;
+            const result2 = document.querySelector(".origin_image_upscale").src;
             myFormData.append('image', result2);
           }
           myFormData.append('scale', upscale_val.value);
@@ -243,6 +261,13 @@ if (t_upscale !== null) {
                 console.log('xhr:', response.image);
                 var imageSrc = "data:" + response.content_type + ";base64," + response.image;
                 var image_upscale = document.querySelector('.image_upscale');
+                var image = new Image();
+                  image.onload = function() {
+                    var width = this.width;
+                    var height = this.height;
+                    document.querySelector(".input_image_size").innerHTML = width + 'x' + height;
+                };
+                image.src = imageSrc;
                 image_upscale.src = imageSrc;
                },
                error: function (xhr, status, error) {

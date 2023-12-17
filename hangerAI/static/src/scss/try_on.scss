@@ -35,9 +35,9 @@
         width: 150px;
         margin-bottom: 10px;
         padding: 10px 20px;
-        background-color: #ffffff;
-        color: #000000;
-        border: 1px solid #000000;
+        background-color: white;
+        color: #99678E;
+        border: 1px solid #99678E;
         border-radius: 4px;
         cursor: pointer;
         font-size: 16px;
@@ -46,8 +46,8 @@
 
     .changeModelButton:hover,
     #downloadButton:hover {
-        background-color: #35979c;
-        color: #ffffff;
+        background-color: #99678E;
+        color: white;
     }
 }
 
@@ -70,11 +70,11 @@
         justify-content: center;
         width: 100%;
         height: 100px;
-        background: #d3d3d3;
+        background: #99678E;
         .title{
             font-size: 28px;
             font-weight: 700;
-            color: #fff;
+            color: white;
             padding-top: 20px;
         }
     }
@@ -85,7 +85,7 @@
     height: 800px;
     padding: 0 10px;
     background: #fff;
-    border: 1px solid #bdbdbd;
+    border: 1px solid #99678E;
     border-radius: 20px 0 0 20px;
     z-index: 12!important;
     position: absolute;
@@ -100,7 +100,7 @@
     .selectCategoryContainer {
         height: 60px;
         width: 60px;
-        background: #d3d3d3;
+        background: #99678E;
         align-items: center;
         text-align: center;
         display: inline-flex;
@@ -227,9 +227,9 @@
 
     .button-group button {
       display: inline-block;
-      background-color: #f1f1f1;
+      background-color: #99678E;
       border: none;
-      color: black;
+      color: white;
       padding: 10px 20px;
       text-align: center;
       text-decoration: none;
@@ -240,7 +240,7 @@
     }
 
     .button-group button.selected {
-      background-color: #2196F3;
+      background-color: #99678E;
       color: white;
     }
 }
@@ -262,7 +262,7 @@
   padding: 10px 20px;
         margin: 5px;
         background-color: #ffffff;
-        color: #000000;
+        color: #99678E;
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -270,8 +270,8 @@
 }
 
 .try-on-btn-g button.selected {
-    background-color: #35979c;
-    color: #ffffff;
+    background-color: #99678E;
+    color: white;
 }
 
 .upload-gallery {
@@ -289,7 +289,7 @@
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     padding: 8px;
     border-radius: 4px;
-    border: 2px dotted #000;
+    border: 2px dotted #99678E;
 }
 
 .changeModelDiv {

@@ -17,6 +17,7 @@
                                     <span class="support">Supports: JPEG, JPG, PNG</span>
                                 </div>
                                 <img class='image_upscale' style="display: none;" src="" alt=""/>
+                                <img class='origin_image_upscale' style="display: none;" src="" alt=""/>
                             </t>
                             <t t-if="default_image == 1">
                                 <div class="select_image_up" style="display: none;">
@@ -29,6 +30,7 @@
                                     <span class="support">Supports: JPEG, JPG, PNG</span>
                                 </div>
                                 <img class='image_upscale' style="display: block;" t-attf-src="data:image/*;base64,{{default_image_val}}" alt=""/>
+                                <img class='origin_image_upscale' style="display: none;" t-attf-src="data:image/*;base64,{{default_image_val}}" alt=""/>
                             </t>
 
                             <a class="clear-image">Tải lại</a>
@@ -50,26 +52,39 @@
                     </div>
                     <div class="setting">
                         <div class="base_box">
-                            <div class="">
-                                <h1 class="fw-bold">Upscale Image</h1>
+                            <div class="" style="text-align: center;">
+                                <h2 class="fw-bold">Upscale Image</h2>
                             </div>
                         </div>
                         <div class="box_setting">
                             <div class="">
                                 <div class="image_title">
-                                    <p class=""><p class="fw-bold">Input Size: </p><span class="image_size">960 x 1280</span></p>
+                                    <div class="d-size-origin">
+                                        <p class="fw-bold wi-100">Original Size: </p>
+                                        <span class="image_size">
+                                            <t t-if="default_image == 1">
+                                                <t t-esc="width"/>x<t t-esc="height"/>
+                                            </t>
+                                        </span>
+                                    </div>
+                                    <div class="d-size-result">
+                                        <p class="fw-bold wi-100">New Size: </p>
+                                        <span class="input_image_size"></span>
+                                    </div>
                                 </div>
-                                <label for="upscale_val"><p class="fw-bold">Upscale to: </p></label>
-                                <select name="upscale_val" id="upscale_val">
-                                    <option value="2">x2</option>
-                                    <option value="4">x4</option>
-                                    <option value="8">x8</option>
-                                    <option value="16">x16</option>
-                                </select>
-                                <br/>
-                                <div class="button-group">
-                                    <button class="button process_upscale_val">Process</button>
-                                    <button class="button">Toggle to original</button>
+                                <div class="select-scale">
+                                    <label for="upscale_val" class="wi-100"><p class="fw-bold">Upscale to: </p></label>
+                                    <select name="upscale_val" id="upscale_val" style="
+                                        color: #99678E;
+                                        border: 1px solid #99678E;
+                                    ">
+                                        <option value="2">x2</option>
+                                        <option value="4">x4</option>
+                                    </select>
+                                </div>
+                                <div class="btn-group-setting">
+                                    <button class="btn-item-c process_upscale_val">Process</button>
+                                    <button class="btn-item-c btn_toggle_origin">Toggle to original</button>
                                 </div>
                             </div>
                         </div>
