@@ -13,6 +13,7 @@ from werkzeug.urls import url_decode, url_encode, url_parse
 
 from odoo import fields, http, SUPERUSER_ID, tools, _
 from odoo.http import request
+from PIL import Image
 _logger = logging.getLogger(__name__)
 
 class HangerAPI(http.Controller):
@@ -287,7 +288,7 @@ class HangerAPI(http.Controller):
             url = 'http://127.0.0.1:5000/process_image'
 
         if model.type_model in ('lower_gp', 'dress_gp'):
-            url = 'https://81a5-81-166-162-13.ngrok-free.app/try-lower'
+            url = 'https://ed7c-136-56-201-191.ngrok-free.app/try-lower'
             if cloth.detailed_type == 'dress':
                 params.update({
                     'type': 'dresses'
@@ -319,7 +320,8 @@ class HangerAPI(http.Controller):
                 suffix = "'}"
 
             inner_string = string[len(prefix):-len(suffix)]
-            image_data = base64.b64decode(inner_string[:-1])
+            if model.type_model == 'upper_hr':
+                image_data = base64.b64decode(inner_string[:-1])
             if model.type_model in ('lower_gp', 'dress_gp'):
                 image_data = base64.b64decode(inner_string)
             image_base64 = base64.b64encode(image_data).decode('utf-8')
@@ -361,12 +363,41 @@ class HangerAPI(http.Controller):
         '/to_upscale',
     ], type='http', auth="public", website=True, csrf=False)
     def to_upscale(self, **kwargs):
-        import base64
-        image_data = kwargs.get('image').split(',')[1]
+        def convert_base64_to_jpg(base64_string):
+            image_data = base64.b64decode(base64_string)
+            image = Image.open(BytesIO(image_data))
+            rgb_image = image.convert("RGB")
 
-        url = 'https://38de-36-225-172-196.ngrok-free.app/upscaleImage'
+            # Create an in-memory byte stream
+            img_byte_stream = BytesIO()
+            rgb_image.save(img_byte_stream, format='JPEG')
+
+            # Get the byte data from the stream
+            img_byte_stream.seek(0)
+            image_bytes = img_byte_stream.getvalue()
+
+            # Convert the byte data to Base64
+            base64_result = base64.b64encode(image_bytes).decode("utf-8")
+
+            return base64_result
+
+        import base64
+        file_path = "D:\\test-StableSR\\input.jpg"
+        # Decode the binary data from base64
+        image_data = kwargs.get('image').split(',')[1]
+        decoded_image_data = base64.b64decode(image_data)
+
+        # Open the file in binary write mode
+        with open(file_path, 'wb') as file:
+            # Write the binary data to the file
+            file.write(decoded_image_data)
+
+        with open(file_path, 'rb') as file:
+            image_bytes = file.read()
+
+        url = 'https://bdf7-34-126-65-24.ngrok-free.app/upscaleImage'
         params = {
-            "image_bytes": image_data,
+            "image_bytes": convert_base64_to_jpg(base64.b64encode(image_bytes).decode('utf-8')),
             'scale': float(kwargs.get('scale'))
         }
 
@@ -392,7 +423,7 @@ class HangerAPI(http.Controller):
                 'content_type': 'image/jpeg',
                 'filename': 'image.jpg'
             }
-            return json.dumps(response_data)
+            return json.dumps(response_data) 
         else:
             # Request failed
             print('Request failed with status code:', response.status_code)
