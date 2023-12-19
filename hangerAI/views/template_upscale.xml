@@ -6,6 +6,7 @@
                 <div class="container">
                     <div class="upload-result">
                         <div class="drag-area">
+                            <input type="hidden" class="is-upload-image" name="is-upload-image"/>
                             <t t-if="default_image == 0">
                                 <div class="select_image_up">
                                     <div class="icon">
@@ -13,7 +14,7 @@
                                     </div>
                                     <span class="header">Drag &amp; Drop</span>
                                     <span class="header">or <span class="button">browse</span></span>
-                                    <input type="file" id="upload" style="display:none"/>
+                                    <input class="i-upload" type="file" id="upload" style="display:none"/>
                                     <span class="support">Supports: JPEG, JPG, PNG</span>
                                 </div>
                                 <img class='image_upscale' style="display: none;" src="" alt=""/>
@@ -38,16 +39,16 @@
                     </div>
                     <div class="available">
                         <ul class="ul-list d-flex align-items-stretch mb-0 overflow-visible">
-<!--                            <t t-foreach="products" t-as="model">-->
-<!--                                <li class="d-flex pe-3">-->
-<!--                                    <input type="radio" class="btn-check pe-none"-->
-<!--                                           name="wsale_categories_top_radios_" id="1" value="1"/>-->
-<!--                                    <div class=" btn btn-light d-flex align-items-center ps-2 pe-3 fs-6 fw-normal " for="1">-->
-<!--                                        <img class="o_image_40_cover oe_img_bg o_bg_img_center rounded-3 me-3" t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>-->
+                            <t t-foreach="products" t-as="model">
+                                <li class="d-flex pe-3">
+                                    <input type="radio" class="btn-check pe-none"
+                                           name="wsale_categories_top_radios_" id="1" value="1"/>
+                                    <div class="available-item btn btn-light d-flex align-items-center ps-2 pe-3 fs-6 fw-normal " for="1">
+                                        <img class="o_image_40_cover oe_img_bg o_bg_img_center rounded-3 me-3" t-attf-name="#{model.id}" t-att-src="image_data_uri(model.image_1920)"/>
 <!--                                        <span><t t-esc="model.name"/></span>-->
-<!--                                    </div>-->
-<!--                                </li>-->
-<!--                            </t>-->
+                                    </div>
+                                </li>
+                            </t>
                         </ul>
                     </div>
                     <div class="setting">

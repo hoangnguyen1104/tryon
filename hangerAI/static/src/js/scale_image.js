@@ -133,7 +133,7 @@ if (t_upscale !== null) {
     const dragText = document.querySelector(".header");
 
     let button = dropArea.querySelector(".button");
-    let input = dropArea.querySelector("input");
+    let input = dropArea.querySelector(".i-upload");
 
     let file;
 
@@ -198,6 +198,7 @@ if (t_upscale !== null) {
                 };
               image.src = fileURL;
               document.querySelector(".origin_image_upscale").src = fileURL;
+              document.querySelector(".is-upload-image").value = 'true';
             };
             fileReader.readAsDataURL(file);
           } else {
@@ -240,6 +241,11 @@ if (t_upscale !== null) {
           let image_upscale = input.files[0];
           let upscale_val = document.getElementById("upscale_val");
           var myFormData = new FormData();
+          if (document.querySelector(".is-upload-image").value == 'true'){
+            myFormData.append('is-upload-image', 'true');
+          }
+          document.querySelector(".is-upload-image").value = false;
+
           if (input.files[0] != undefined){
             const result = document.querySelector(".origin_image_upscale").src;
             myFormData.append('image', result);
@@ -277,4 +283,18 @@ if (t_upscale !== null) {
                }
             });
     };
+
+    let available_items = upscale_image.querySelectorAll(".available-item");
+    for (let i = 0; i < available_items.length; i++) {
+        available_items[i].onclick = () => {
+            let e = available_items[i].getElementsByTagName('img')[0];
+            console.log(e.src);
+            document.querySelector(".select_image_up").style.display = 'none';
+            document.querySelector(".origin_image_upscale").src = e.src;
+            document.querySelector(".image_upscale").src = e.src;
+            document.querySelector(".image_upscale").style.display = 'block';
+            document.querySelector(".is-upload-image").value = false;
+
+        }
+    }
 }

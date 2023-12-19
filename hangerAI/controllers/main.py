@@ -128,10 +128,8 @@ class HangerAPI(http.Controller):
                 "default_image": 0
             }
         product_template = request.env['product.template'].sudo()
-        products = product_template.search([('create_uid', '=', request.uid)])
-        if len(products) == 0:
-            products = product_template.search([], limit=20)
-
+        products = product_template.search([('create_uid', '=', request.uid), ('detailed_type', '=', 'model'),
+                                            ('type_model', '=', 'upload_upscale')])
         values.update({
             'products': products
         })
@@ -404,10 +402,25 @@ class HangerAPI(http.Controller):
             return base64_result
 
         import base64
-        file_path = "D:\\test-StableSR\\input.jpg"
+        file_path = "E:\\input.jpg"
         # Decode the binary data from base64
         image_data = kwargs.get('image').split(',')[1]
         decoded_image_data = base64.b64decode(image_data)
+
+        if kwargs.get('is-upload-image'):
+            import random
+            import string
+            def generate_random_name(length):
+                letters = string.ascii_uppercase + string.ascii_lowercase + string.digits
+                return ''.join(random.choice(letters) for _ in range(length))
+
+            product = request.env['product.template']
+            product.create({
+                'name': generate_random_name(6),
+                'detailed_type': 'model',
+                'type_model': 'upload_upscale',
+                'image_1920': image_data
+            })
 
         # Open the file in binary write mode
         with open(file_path, 'wb') as file:
