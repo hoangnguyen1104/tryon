@@ -142,6 +142,7 @@ if (t_upscale !== null) {
     };
 
     // when browse
+    if (input != null)
     input.addEventListener("change", function () {
       file = this.files[0];
       dropArea.classList.add("active");
@@ -230,29 +231,16 @@ if (t_upscale !== null) {
 
     // action process upscale
     let button_process_up = upscale_image.querySelector(".process_upscale_val");
-    button_process_up.onclick = async () => {
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-        });
-
-          let image_upscale = input.files[0];
+    button_process_up.onclick = () => {
           let upscale_val = document.getElementById("upscale_val");
           var myFormData = new FormData();
           if (document.querySelector(".is-upload-image").value == 'true'){
             myFormData.append('is-upload-image', 'true');
           }
           document.querySelector(".is-upload-image").value = false;
+          const result2 = document.querySelector(".origin_image_upscale").src;
+          myFormData.append('image', result2);
 
-          if (input.files[0] != undefined){
-            const result = document.querySelector(".origin_image_upscale").src;
-            myFormData.append('image', result);
-          } else {
-            const result2 = document.querySelector(".origin_image_upscale").src;
-            myFormData.append('image', result2);
-          }
           myFormData.append('scale', upscale_val.value);
           myFormData.append('res_id', 'null');
 
