@@ -27,6 +27,13 @@
                             <field name="densepose"/>
                             <field name="parse_bytedance"/>
                             <field name="pose_25"/>
+                            <field name="agonostic_v32"/>
+                            <field name="parse_agonostic_v32"/>
+                            <field name="parse_v3"/>
+                            <field name="openpose_img"/>
+                            <field name="openpose_json"/>
+                            <field name="cloth_model"/>
+                            <field name="cloth_mask_model"/>
                         </group>
                         <group>
                             <field name="cloth_align"/>

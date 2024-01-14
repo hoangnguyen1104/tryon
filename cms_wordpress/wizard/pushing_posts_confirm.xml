@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pushing_posts_confirm_popup" model="ir.ui.view">
+            <field name="name">Pushing Posts Confirm Popup</field>
+            <field name="model">pushing.posts.confirm</field>
+            <field name="arch" type="xml">
+                <form string="Pushing Posts Confirm Popup">
+                     <notebook>
+                         <page string="Consuming Sites">
+                            <field name="consuming_ids"/>
+                         </page>
+                         <page string="Posts">
+                            <field name="post_ids"/>
+                         </page>
+                     </notebook>
+                    <footer>
+                        <button name="act_confirm_pushing" string="Pushing" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Close" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

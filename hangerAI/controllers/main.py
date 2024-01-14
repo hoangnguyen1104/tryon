@@ -138,6 +138,19 @@ class HangerAPI(http.Controller):
     @http.route(['/upload_model'], type='http', auth="user",
                 website=True, csrf=False)
     def upload_model(self, **kwargs):
+        def get_file_from_hr(root, model, folderName):
+            import os
+            key = model[:6]
+            item_path = root + folderName
+            item_list = os.listdir(item_path)
+            for item in item_list:
+                if item.startswith(key):
+                    path = os.path.join(item_path, item)
+                    with open(path, 'rb') as image_file:
+                        binary_data = image_file.read()
+                        encoded_data = base64.b64encode(binary_data).decode('utf-8')
+                        return encoded_data
+
         type_gallery = kwargs.get('type_gallery')
         type_model = False
         if type_gallery == 'tops':
@@ -151,6 +164,9 @@ class HangerAPI(http.Controller):
             encoded_string = base64.b64encode(file_storage.read())
             return encoded_string.decode("utf-8")
 
+        filename = kwargs.get('upload_files').filename
+        root = "E:\\input\\\input\\"
+
         product = request.env['product.template']
         file = request.httprequest.files.getlist('upload_files')[0]
         try:
@@ -158,7 +174,15 @@ class HangerAPI(http.Controller):
                 'name': file.filename,
                 'detailed_type': 'model',
                 'type_model': type_model,
-                'image_1920': encode_image_to_base64(file)
+                'image_1920': encode_image_to_base64(file),
+                'agonostic_v32': get_file_from_hr(root, filename, "agnostic-v3.2"),
+                'densepose': get_file_from_hr(root, filename, "image-densepose"),
+                'parse_agonostic_v32': get_file_from_hr(root, filename, "image-parse-agnostic-v3.2"),
+                'parse_v3': get_file_from_hr(root, filename, "image-parse-v3"),
+                'openpose_img': get_file_from_hr(root, filename, "openpose_img"),
+                'openpose_json': get_file_from_hr(root, filename, "openpose_json"),
+                'cloth_model': get_file_from_hr(root, filename, "cloth"),
+                'cloth_mask_model': get_file_from_hr(root, filename, "cloth-mask")
             })
         except Exception as e:
             _logger.info("upload model fail")
@@ -167,6 +191,19 @@ class HangerAPI(http.Controller):
     @http.route(['/upload_gallery'], type='http', auth="user",
                 website=True, csrf=False)
     def upload_gallery(self, **kwargs):
+        def get_file_from_hr(root, model, folderName):
+            import os
+            key = model[:6]
+            item_path = root + folderName
+            item_list = os.listdir(item_path)
+            for item in item_list:
+                if item.startswith(key):
+                    path = os.path.join(item_path, item)
+                    with open(path, 'rb') as image_file:
+                        binary_data = image_file.read()
+                        encoded_data = base64.b64encode(binary_data).decode('utf-8')
+                        return encoded_data
+
         type_gallery = kwargs.get('type-gallery')
         detailed_type = False
         if type_gallery == 'tops':
@@ -181,13 +218,17 @@ class HangerAPI(http.Controller):
             encoded_string = base64.b64encode(file_storage.read())
             return encoded_string.decode("utf-8")
 
+        filename = kwargs.get('image').filename
+        root = "E:\\input\\\input\\"
+
         product = request.env['product.template']
         try:
             file = kwargs.get('image')
             new_model = product.create({
                 'name': file.filename,
                 'detailed_type': detailed_type,
-                'image_1920': encode_image_to_base64(file)
+                'image_1920': encode_image_to_base64(file),
+                'mask': get_file_from_hr(root, filename, "cloth-mask")
             })
         except Exception as e:
             _logger.info("upload model fail")
@@ -209,18 +250,18 @@ class HangerAPI(http.Controller):
         import os
         import shutil
         def make_folder_emp(folder, model):
-            folder_path = 'D:\\test-try-on-hr\\' + folder
+            folder_path = 'E:\\test-try-on-hr\\' + folder
             if model.type_model in ('lower_gp', 'dress_gp'):
-                folder_path = 'D:\\test-try-on-gp\\' + folder
+                folder_path = 'E:\\test-try-on-gp\\' + folder
 
             if os.path.exists(folder_path):
                 shutil.rmtree(folder_path)
             os.makedirs(folder_path)
 
         def make_folder(folder, file, type_file, name_file, model):
-            folder_path = 'D:\\test-try-on-hr\\' + folder
+            folder_path = 'E:\\test-try-on-hr\\' + folder
             if model.type_model in ('lower_gp', 'dress_gp'):
-                folder_path = 'D:\\test-try-on-gp\\' + folder
+                folder_path = 'E:\\test-try-on-gp\\' + folder
 
             if os.path.exists(folder_path):
                 shutil.rmtree(folder_path)
@@ -270,9 +311,9 @@ class HangerAPI(http.Controller):
         import os
         import shutil
         def make_folder(folder, file, type_file, name_file, model):
-            folder_path = 'D:\\test-try-on-hr\\' + folder
+            folder_path = 'E:\\test-try-on-hr\\' + folder
             if model.type_model in ('lower_gp', 'dress_gp'):
-                folder_path = 'D:\\test-try-on-gp\\' + folder
+                folder_path = 'E:\\test-try-on-gp\\' + folder
 
             # Set the file path including the folder path and file name with the .jpg extension
             file_path = os.path.join(folder_path, name_file + type_file)

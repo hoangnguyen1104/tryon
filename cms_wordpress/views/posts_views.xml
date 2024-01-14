@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_post_line_form" model="ir.ui.view">
+            <field name="name">post.line.form</field>
+            <field name="model">post.line</field>
+            <field name="arch" type="xml">
+                <form string="Post Line">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="trailer_content" invisible="1"/>
+                            <field name="content"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_post_line_tree" model="ir.ui.view">
+            <field name="name">post.line.tree</field>
+            <field name="model">post.line</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Post Line">
+                    <field name="name"/>
+                    <field name="trailer_content" class="text-wrap"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_posts_form" model="ir.ui.view">
+            <field name="name">posts.form</field>
+            <field name="model">posts</field>
+            <field name="arch" type="xml">
+                <form string="Posts">
+                    <header>
+                        <button name="action_preview_post" string="Preview Post" class="oe_highlight"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="title"/>
+                            <field name="url" widget="url"/>
+                            <field name="sourcing_id"/>
+                            <field name="post_line_ids"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_posts_tree" model="ir.ui.view">
+            <field name="name">posts.tree</field>
+            <field name="model">posts</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Posts">
+                    <field name="title"/>
+                    <field name="sourcing_id"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_posts_dashboard" model="ir.actions.act_window">
+            <field name="name">Posts</field>
+            <field name="res_model">posts</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_neutral_face">
+                    This is the Post Dashboard
+                </p>
+            </field>
+        </record>
+        <record id="action_pushing_wp_posts_1" model="ir.actions.act_window">
+            <field name="name">Pushing Posts</field>
+            <field name="res_model">pushing.posts.confirm</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="cms_wordpress.model_posts"/>
+            <field name="binding_view_types">list,form</field>
+        </record>
+    </data>
+</odoo>

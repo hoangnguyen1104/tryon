@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sourcing_sites,sourcing.sites,model_sourcing_sites,,1,1,1,1
+access_xpath_fields_line,xpath.fields.line,model_xpath_fields_line,,1,1,1,1
+access_category_sites,category.sites,model_category_sites,,1,1,1,1
+access_posts,posts,model_posts,,1,1,1,1
+access_post_line,post.line,model_post_line,,1,1,1,1
+access_preview_html,preview.html,model_preview_html,,1,1,1,1
+access_consuming_sites,consuming.sites,model_consuming_sites,,1,1,1,1
+access_pushing_posts_confirm,pushing.posts.confirm,model_pushing_posts_confirm,,1,1,1,1
+

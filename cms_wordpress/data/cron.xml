@@ -1,0 +1,11 @@
+<odoo noupdate="1">
+    <record id="ir_cron_auto_crawl_website" model="ir.cron">
+        <field name="name">Job Crawl Website</field>
+        <field name="model_id" ref="model_sourcing_sites"/>
+        <field name="state">code</field>
+        <field name="code">model.ir_cron_crawl()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+    </record>
+</odoo>

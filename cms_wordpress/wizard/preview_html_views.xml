@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="preview_html_popup" model="ir.ui.view">
+            <field name="name">Preview Html Popup</field>
+            <field name="model">preview.html</field>
+            <field name="arch" type="xml">
+                <form string="Preview Html Popup">
+                    <field name="content" widget="html"/>
+                    <footer>
+                        <button special="cancel" string="Close" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

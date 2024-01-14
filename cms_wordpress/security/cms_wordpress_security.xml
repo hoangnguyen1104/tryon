@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="consuming_sites_rule" model="ir.rule">
+        <field name="name">Consuming Sites Rule</field>
+        <field name="model_id" ref="model_consuming_sites"/>
+        <field name="domain_force">[('assign_ids', 'in', user.id)]</field>
+    </record>
+</data>
+</odoo>

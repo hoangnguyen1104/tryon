@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="CMS"
+        id="menu_cms_wordpress"
+        web_icon="cms_wordpress,static/description/logo.png">
+        <menuitem id="sourcing_sites" name="Sourcing Sites"
+                  action="action_sourcing_sites_dashboard"
+                  sequence="1"/>
+        <menuitem id="menu_posts" name="Data Posts"
+                  action="action_posts_dashboard"
+                  sequence="2"/>
+        <menuitem id="consuming_sites" name="Consuming Sites"
+                  action="action_consuming_sites_dashboard"
+                  sequence="3"/>
+
+        <menuitem id="cms_wp_config" name="Config" sequence="20">
+            <menuitem id="menu_category_sites" action="action_category_sites_dashboard" sequence="21"/>
+            <menuitem id="menu_cron_job_cms" name="Cron Job"
+                      action="base.ir_cron_act" sequence="22"/>
+            <menuitem id="menu_res_users_cms" name="Res Users"
+                      action="base.action_res_users" sequence="23"/>
+            <menuitem id="menu_params_system_cms" name="System Params"
+                      action="base.ir_config_list_action" sequence="24"/>
+        </menuitem>
+    </menuitem>
+</odoo>

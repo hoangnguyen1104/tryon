@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sourcing_sites_form" model="ir.ui.view">
+            <field name="name">sourcing.sites.form</field>
+            <field name="model">sourcing.sites</field>
+            <field name="arch" type="xml">
+                <form string="Sourcing Sites">
+                    <header>
+                        <button name="action_clone" string="Clone Website" class="oe_highlight"
+                                type="object"/>
+                        <button name="action_parsing_xpath" string="Parsing Xpath" class="oe_highlight"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group name="common_info">
+                            <field name="web_url" widget="url"/>
+                            <field name="category_id"/>
+                            <field name="xpath_post"/>
+                            <field name="xpath_next_page"/>
+                            <field name="post_number_clone"/>
+                            <field name="sync_date" readonly="1"/>
+                            <field name="state"/>
+                        </group>
+                        <notebook>
+                            <page string="Field Lines" name="field_lines">
+                                <field name="crawl_fields" widget="section_and_note_one2many" mode="tree">
+                                    <form>
+                                        <field name="name"/>
+                                        <field name="xpath"/>
+                                        <field name="state"/>
+                                    </form>
+                                    <tree string="Field Lines" editable="bottom">
+                                        <control>
+                                            <create name="add_product_control" string="Add a field"/>
+                                        </control>
+                                        <field name="name"/>
+                                        <field name="xpath"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Note" name="note_site">
+                                <field name="description"/>
+                            </page>
+                            <page string="Data Posts" name="note_site">
+                                <field name="posts_data"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+        <record id="view_sourcing_sites_tree" model="ir.ui.view">
+            <field name="name">sourcing.sites.tree</field>
+            <field name="model">sourcing.sites</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Sourcing Sites">
+                    <field name="web_url"/>
+                    <field name="sync_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_sourcing_sites_dashboard" model="ir.actions.act_window">
+            <field name="name">Sourcing Sites</field>
+            <field name="res_model">sourcing.sites</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_neutral_face">
+                    This is the Sourcing Sites Dashboard
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

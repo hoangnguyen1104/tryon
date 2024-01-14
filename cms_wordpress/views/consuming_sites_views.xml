@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_consuming_sites_form" model="ir.ui.view">
+            <field name="name">consuming.sites.form</field>
+            <field name="model">consuming.sites</field>
+            <field name="arch" type="xml">
+                <form string="Consuming Sites">
+                    <header>
+                        <button name="action_open_pushing" string="Pushing Posts" class="oe_highlight"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="web_url"/>
+                            <field name="username"/>
+                            <field name="token"/>
+                            <field name="assign_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_consuming_sites_tree" model="ir.ui.view">
+            <field name="name">consuming.sites.tree</field>
+            <field name="model">consuming.sites</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Consuming Sites">
+                    <field name="name"/>
+                    <field name="web_url"/>
+                    <field name="assign_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_consuming_sites_dashboard" model="ir.actions.act_window">
+            <field name="name">Consuming Sites</field>
+            <field name="res_model">consuming.sites</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_neutral_face">
+                    This is the Consuming Sites Dashboard
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
