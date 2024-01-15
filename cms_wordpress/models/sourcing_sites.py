@@ -20,11 +20,10 @@ from requests import RequestException
 
 _logger = logging.getLogger(__name__)
 
-def filter_expect_tags(key_html):
-    tags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6", "img"]
-    if key_html.name in tags:
+def filter_expect_tags(key_html, tags_crawl):
+    if key_html.name in tags_crawl:
         return [key_html]
-    return key_html.find_all(tags)
+    return key_html.find_all(tags_crawl)
 
 def resize_image(img_url, max_width=620, timeout=5):
     try:
@@ -175,6 +174,8 @@ def get_soup(url):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
 
+def get_element_all(soup, _tag, _class):
+    return soup.find_all(_tag, class_=_class)
 
 def get_element(soup, _tag, _class):
     return soup.find(_tag, class_=_class)
@@ -240,6 +241,7 @@ class SourcingSites(models.Model):
         post_env = self.env['posts']
         post_line_env = self.env['post.line']
         dem = 0
+        tags_crawl = self.env['tag.crawl.website'].search([]).mapped('name')
         for p in posts:
             dem += 1
             if dem > num_post:
@@ -265,7 +267,7 @@ class SourcingSites(models.Model):
                     _logger.info(fields[i][1])
                     key_html = get_element(p_soup, _tag, _class)
                     key_html = remove_scripts_tag(key_html)
-                    key_html = filter_expect_tags(key_html)
+                    key_html = filter_expect_tags(key_html, tags_crawl)
                     # key_html = remove_form_tag(key_html)
                     # key_html = unwrap_noscript_tag(key_html)
                     key_html_str = to_prettify(key_html)

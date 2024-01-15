@@ -29,17 +29,25 @@
                             <page string="Field Lines" name="field_lines">
                                 <field name="crawl_fields" widget="section_and_note_one2many" mode="tree">
                                     <form>
-                                        <field name="name"/>
-                                        <field name="xpath"/>
-                                        <field name="state"/>
+                                        <header>
+                                            <button name="action_preview_elements" string="Set STT" class="oe_highlight"
+                                                type="object"/>
+                                        </header>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="xpath"/>
+                                            <field name="stt"/>
+                                            <field name="state"/>
+                                        </group>
                                     </form>
-                                    <tree string="Field Lines" editable="bottom">
+                                    <tree string="Field Lines" editable="bottom" create="0" edit="0">
                                         <control>
                                             <create name="add_product_control" string="Add a field"/>
                                         </control>
                                         <field name="name"/>
                                         <field name="xpath"/>
                                         <field name="state"/>
+                                        <field name="stt"/>
                                     </tree>
                                 </field>
                             </page>

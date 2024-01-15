@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tag_crawl_website_form" model="ir.ui.view">
+            <field name="name">tag.crawl.website.form</field>
+            <field name="model">tag.crawl.website</field>
+            <field name="arch" type="xml">
+                <form string="Tag Crawl">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_tag_crawl_website_tree" model="ir.ui.view">
+            <field name="name">tag.crawl.website.tree</field>
+            <field name="model">tag.crawl.website</field>
+            <field eval="100" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Tag Crawl">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_tag_crawl_website_dashboard" model="ir.actions.act_window">
+            <field name="name">Tag Crawl</field>
+            <field name="res_model">tag.crawl.website</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_neutral_face">
+                    This is the Consuming Sites Dashboard
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

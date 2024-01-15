@@ -21,6 +21,8 @@
                       action="base.action_res_users" sequence="23"/>
             <menuitem id="menu_params_system_cms" name="System Params"
                       action="base.ir_config_list_action" sequence="24"/>
+            <menuitem id="menu_tag_crawl_website_cms" name="Tags Crawl"
+                      action="action_tag_crawl_website_dashboard" sequence="25"/>
         </menuitem>
     </menuitem>
 </odoo>

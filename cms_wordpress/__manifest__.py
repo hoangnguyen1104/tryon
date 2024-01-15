@@ -18,6 +18,7 @@
         'views/category_sites_views.xml',
         'views/posts_views.xml',
         'views/consuming_sites_views.xml',
+        'views/tag_crawl_website.xml',
         'wizard/preview_html_views.xml',
         'wizard/pushing_posts_confirm.xml',
         'views/menuitem.xml',
