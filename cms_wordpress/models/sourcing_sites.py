@@ -50,13 +50,12 @@ def resize_image(img_url, max_width=620, timeout=5):
 
 
 def to_prettify(key_html):
-    tags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6"]
     content = ''
     max_image_width = 620
     dict = {}
     for item in key_html:
         try:
-            if item.name in tags:
+            if item.name != 'img':
                 content += f'<{item.name}>{item.text}</{item.name}>'
             elif item.name == 'img':
                 # Resize the image and append with <img> tags

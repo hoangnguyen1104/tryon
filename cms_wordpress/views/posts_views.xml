@@ -46,10 +46,10 @@
                         </group>
                         <notebook>
                             <page string="Title">
-                                <field name="data_title"/>
+                                <field name="data_title" widget="html"/>
                             </page>
                             <page string="Content">
-                                <field name="data_content"/>
+                                <field name="data_content" widget="html"/>
                             </page>
                             <page string="Fields">
                                 <field name="post_line_ids"/>
