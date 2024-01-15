@@ -43,8 +43,18 @@
                             <field name="title"/>
                             <field name="url" widget="url"/>
                             <field name="sourcing_id"/>
-                            <field name="post_line_ids"/>
                         </group>
+                        <notebook>
+                            <page string="Title">
+                                <field name="data_title"/>
+                            </page>
+                            <page string="Content">
+                                <field name="data_content"/>
+                            </page>
+                            <page string="Fields">
+                                <field name="post_line_ids"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>

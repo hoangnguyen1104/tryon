@@ -10,6 +10,8 @@ class Posts(models.Model):
     title = fields.Char(string='Title')
     sourcing_id = fields.Many2one('sourcing.sites', string='Sourcing Site')
     post_line_ids = fields.One2many('post.line', 'post_id', String="Data Fields")
+    data_title = fields.Text('Data title')
+    data_content = fields.Text('Data content')
 
     @api.model
     def act_pushing_posts(self):

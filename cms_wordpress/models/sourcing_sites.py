@@ -12,8 +12,77 @@ import logging
 from datetime import datetime, timedelta
 import threading
 import time
+from PIL import Image
+from io import BytesIO
+import base64
+from requests import RequestException
+
 
 _logger = logging.getLogger(__name__)
+
+def filter_expect_tags(key_html):
+    tags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6", "img"]
+    if key_html.name in tags:
+        return [key_html]
+    return key_html.find_all(tags)
+
+def resize_image(img_url, max_width=620, timeout=5):
+    try:
+        response = requests.get(img_url, timeout=timeout)
+        response.raise_for_status()
+        img = Image.open(BytesIO(response.content))
+
+        # Set a maximum width for the image
+        width_percent = (max_width / float(img.size[0]))
+        new_height = int((float(img.size[1]) * float(width_percent)))
+        img = img.resize((max_width, new_height), Image.Resampling.LANCZOS)
+
+        # Convert the image to a data URL
+        buffered = BytesIO()
+        img.save(buffered, format="JPEG")
+
+        # Encode the image data using base64
+        img_data_url = f"data:image/jpeg;base64,{base64.b64encode(buffered.getvalue()).decode('utf-8')}"
+
+        return img_data_url
+    except RequestException as e:
+        print(f"Error or timeout resizing image: {e}")
+        return img_url
+
+
+def to_prettify(key_html):
+    tags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6"]
+    content = ''
+    max_image_width = 620
+    dict = {}
+    for item in key_html:
+        try:
+            if item.name in tags:
+                content += f'<{item.name}>{item.text}</{item.name}>'
+            elif item.name == 'img':
+                # Resize the image and append with <img> tags
+                img_url = item.get('data-src') or item['src']
+                alt_text = item.get('alt', '')
+                value = f'<img src="{img_url}" style="width: 620px;" alt="{alt_text}">'
+                if not dict.get(value):
+                    dict.update({
+                        value: 1
+                    })
+                    content += value
+                # resized_img_data_url = resize_image(img_url, max_image_width)
+                #
+                # if resized_img_data_url:
+                #     alt_text = item.get('alt', '')
+                #     value = f'<img src="{resized_img_data_url}" alt="{alt_text}">'
+                #     if not dict.get(value):
+                #         dict.update({
+                #             value: 1
+                #         })
+                #         content += value
+        except Exception as e:
+            _logger.error(item)
+            _logger.error(e)
+    return content
 
 def get_element_by_xpath(url, xpath):
     _logger.info(xpath)
@@ -101,7 +170,7 @@ def find_element_by_text(soup, text_selector):
 
 
 def get_soup(url):
-    response = requests.get(url)
+    response = requests.get(url, verify=False)
     html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
@@ -140,6 +209,8 @@ class SourcingSites(models.Model):
     web_url = fields.Char(String="Website Url")
     category_id = fields.Many2one('category.sites', string="Category Site")
     xpath_post = fields.Char(string="Xpath Post")
+    xpath_title = fields.Char(string="Xpath Tittle")
+    xpath_content = fields.Char(string="Xpath Content")
     crawl_fields = fields.One2many('xpath.fields.line', 'sourcing_id', String="Crawl Fields")
     sync_date = fields.Datetime(string="Sync Date")
     xpath_next_page = fields.Char(string="Xpath Next Page")
@@ -151,6 +222,7 @@ class SourcingSites(models.Model):
     description = fields.Html(string="Note")
     post_number_clone = fields.Integer(string="Number Post Crawl")
     posts_data = fields.One2many('posts', 'sourcing_id', string='Data Posts')
+    minute_cron = fields.Integer('Minute next cron')
 
     def check_exist(self, link):
         post_env = self.env['posts']
@@ -159,7 +231,7 @@ class SourcingSites(models.Model):
             return True
         return False
 
-    def crawl_website(self, url, post, fields):
+    def crawl_website(self, url, post, fields, num_post):
         soup = get_soup(url)
         _tag, _class = get_tag_class(post)
         posts = soup.find_all(_tag, class_=_class)
@@ -167,8 +239,11 @@ class SourcingSites(models.Model):
 
         post_env = self.env['posts']
         post_line_env = self.env['post.line']
-
+        dem = 0
         for p in posts:
+            dem += 1
+            if dem > num_post:
+                break
             try:
                 link = p.find('a')['href']
                 _logger.info(link)
@@ -190,18 +265,25 @@ class SourcingSites(models.Model):
                     _logger.info(fields[i][1])
                     key_html = get_element(p_soup, _tag, _class)
                     key_html = remove_scripts_tag(key_html)
-                    key_html = remove_form_tag(key_html)
-                    key_html = unwrap_noscript_tag(key_html)
-                    content += key_html.prettify() + '\n'
-                    _logger.info(key_html.prettify())
+                    key_html = filter_expect_tags(key_html)
+                    # key_html = remove_form_tag(key_html)
+                    # key_html = unwrap_noscript_tag(key_html)
+                    key_html_str = to_prettify(key_html)
+                    content += key_html_str + '\n'
+                    _logger.info(key_html_str)
                     new_post_line = post_line_env.create({
                         'name': fields[i][0],
-                        'content': key_html.prettify(),
+                        'content': key_html_str,
                         'post_id': new_post.id
                     })
+                    if fields[i][0] == 'title':
+                        new_post.data_title = get_text(key_html_str)
+                    if fields[i][0] == 'content':
+                        new_post.data_content = key_html_str
+
             except Exception as e:
                 print(e)
-        return len(posts)
+        return dem
 
     def action_clone(self):
         self.sync_date = datetime.now()
@@ -211,9 +293,10 @@ class SourcingSites(models.Model):
         for field in self.crawl_fields:
             fields.append((field.name, field.xpath))
         while num_post > 0:
-            sl = self.crawl_website(url, self.xpath_post, fields)
+            sl = self.crawl_website(url, self.xpath_post, fields, num_post)
             num_post -= sl
-            url = get_next_page(url, self.xpath_next_page)
+            if num_post > 0:
+                url = get_next_page(url, self.xpath_next_page)
 
     def do_crawl(self):
         self.sync_date = datetime.now()
@@ -223,10 +306,10 @@ class SourcingSites(models.Model):
         for field in self.crawl_fields:
             fields.append((field.name, field.xpath))
         while num_post > 0:
-            sl = self.crawl_website(url, self.xpath_post, fields)
+            sl = self.crawl_website(url, self.xpath_post, fields, num_post)
             num_post -= sl
-            url = get_next_page(url, self.xpath_next_page)
-        pass
+            if num_post > 0:
+                url = get_next_page(url, self.xpath_next_page)
 
     def ir_cron_crawl(self):
         sourcing_sites = self.sudo().search([])
@@ -255,13 +338,17 @@ class SourcingSites(models.Model):
         if self.xpath_post.startswith('//*'):
             self.xpath_post = get_element_by_xpath(self.web_url, self.xpath_post)
             self.xpath_next_page = get_element_by_xpath(self.web_url, self.xpath_next_page)
-            fields = []
+            fields = [('title', self.xpath_title), ('content', self.xpath_content)]
             fields_html = []
+            fields_html.append(False)
+            fields_html.append(False)
             for field in self.crawl_fields:
                 fields.append((field.name, field.xpath))
                 fields_html.append(False)
             fields_html = self.parse_xpath_fields(self.web_url, self.xpath_post, fields, fields_html)
-            i = 0
+            self.xpath_title = fields_html[0]
+            self.xpath_content = fields_html[1]
+            i = 2
             for field in self.crawl_fields:
                 field.xpath = fields_html[i]
                 i = i + 1
@@ -278,3 +365,20 @@ class SourcingSites(models.Model):
             site.do_crawl()
             new_cr.commit()
         return {}
+
+    @api.model_create_multi
+    def create(self, values_list):
+        res = super(SourcingSites, self).create(values_list)
+        field_line = self.env['xpath.fields.line']
+        field_line.create({
+            'name': 'title',
+            'xpath': res.xpath_title,
+            'sourcing_id': res.id
+        })
+        field_line.create({
+            'name': 'content',
+            'xpath': res.xpath_content,
+            'sourcing_id': res.id
+        })
+        return res
+

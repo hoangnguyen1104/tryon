@@ -17,8 +17,11 @@
                             <field name="web_url" widget="url"/>
                             <field name="category_id"/>
                             <field name="xpath_post"/>
+                            <field name="xpath_title"/>
+                            <field name="xpath_content"/>
                             <field name="xpath_next_page"/>
                             <field name="post_number_clone"/>
+                            <field name="minute_cron"/>
                             <field name="sync_date" readonly="1"/>
                             <field name="state"/>
                         </group>
@@ -58,6 +61,7 @@
             <field name="arch" type="xml">
                 <tree string="Sourcing Sites">
                     <field name="web_url"/>
+                    <field name="minute_cron"/>
                     <field name="sync_date"/>
                     <field name="state"/>
                 </tree>

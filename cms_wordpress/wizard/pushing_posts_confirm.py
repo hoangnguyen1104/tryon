@@ -27,9 +27,9 @@ class PushingPostsConfirm(models.TransientModel):
             for consuming in self.consuming_ids:
                 url = consuming.web_url + "/?rest_route=/wp/v2/posts"
                 payload = json.dumps({
-                    "title": post.post_line_ids[0].content,
+                    "title": post.data_title,
                     "status": "publish",
-                    "content": post.post_line_ids[1].content
+                    "content": post.data_content
                 })
                 _logger.info(payload)
                 account = consuming.username + ":" + consuming.token
